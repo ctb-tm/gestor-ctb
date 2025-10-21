@@ -7,15 +7,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* (Todo o seu CSS anterior permanece o mesmo) */
+        /* ... (O CSS é o mesmo da versão anterior, omitido aqui para ser breve) ... */
+        /* Colar o mesmo CSS da resposta anterior aqui */
         
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
-
         .container {
             max-width: 1400px;
             margin: 0 auto;
@@ -23,7 +25,6 @@
             border-radius: 15px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
-
         header {
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
@@ -31,7 +32,6 @@
             text-align: center;
             border-radius: 15px 15px 0 0;
         }
-
         header img {
             max-width: 150px;
             height: auto;
@@ -40,16 +40,13 @@
             background: white;
             padding: 10px;
         }
-
         header h1 { font-size: 2.5em; margin-bottom: 10px; }
-
         nav {
             background: #2a5298;
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
         }
-
         nav button {
             background: transparent;
             color: white;
@@ -60,31 +57,21 @@
             transition: all 0.3s;
             border-bottom: 3px solid transparent;
         }
-
         nav button:hover, nav button.active {
             background: rgba(255,255,255,0.1);
             border-bottom: 3px solid #ffd700;
         }
-
         .content { padding: 30px; min-height: 500px; }
-        
         .page { display: none; }
         .page.active { display: block; animation: fadeIn 0.5s; }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .form-group { margin-bottom: 20px; }
-        
         .form-group label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
             color: #333;
         }
-
         .form-group input, .form-group select {
             width: 100%;
             padding: 12px;
@@ -92,12 +79,10 @@
             border-radius: 8px;
             font-size: 1em;
         }
-        
         .form-group input:disabled, .form-group select:disabled {
             background: #f0f0f0;
             cursor: not-allowed;
         }
-
         .btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -110,17 +95,14 @@
             transition: all 0.3s;
             margin: 5px;
         }
-
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
-
         .btn-success { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
         .btn-danger { background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%); }
         .btn-warning { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
         .btn-info { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
-
         table {
             width: 100%;
             border-collapse: collapse;
@@ -129,32 +111,26 @@
             border-radius: 8px;
             overflow: hidden;
         }
-
         table thead {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
-
         table th, table td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #eee;
         }
-
         table tbody tr:hover { background: #f8f9ff; }
-
         .alert {
             padding: 15px;
             margin-bottom: 20px;
             border-radius: 8px;
             font-weight: 500;
         }
-
         .alert-success { background: #d4edda; color: #155724; }
         .alert-info { background: #d1ecf1; color: #0c5460; }
         .alert-warning { background: #fff3cd; color: #856404; }
         .alert-danger { background: #f8d7da; color: #721c24; }
-
         .control-panel {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             padding: 20px;
@@ -162,7 +138,6 @@
             margin-bottom: 30px;
             color: white;
         }
-
         .status-badge {
             display: inline-block;
             padding: 8px 15px;
@@ -170,33 +145,27 @@
             font-weight: 600;
             margin: 10px 0;
         }
-
         .status-active { background: #38ef7d; color: #115d3b; }
         .status-inactive { background: #f45c43; }
-
         .grid-3 {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
-
         .info-card {
             background: #f8f9ff;
             padding: 20px;
             border-radius: 10px;
             border-left: 4px solid #667eea;
         }
-
         .info-card h4 { color: #667eea; margin-bottom: 10px; }
-
         .group-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
-
         .group-bracket {
             background: #f8f9ff;
             padding: 20px;
@@ -204,14 +173,12 @@
             margin-bottom: 20px;
             border: 2px solid #667eea;
         }
-
         .group-bracket h3 {
             color: #667eea;
             margin-bottom: 15px;
             border-bottom: 2px solid #667eea;
             padding-bottom: 10px;
         }
-
         .group-player-list {
             list-style: none;
             padding: 0;
@@ -232,7 +199,34 @@
             font-weight: 400;
             color: #777;
         }
-
+        
+        /* NOVO: Estilo para o Game-Card (usado em 'Jogos Grupo') */
+        .game-card {
+            background: white;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .game-card h4 { color: #667eea; margin-bottom: 10px; }
+        .player-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: #f8f9ff;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+        .player-name { flex: 1; font-weight: 600; }
+        .score-input {
+            width: 60px;
+            padding: 8px;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+        
         @media (max-width: 768px) {
             nav { flex-direction: column; }
         }
@@ -267,66 +261,40 @@
                         <button class="btn btn-warning" onclick="resetTournament()">🔄 Resetar Sistema</button>
                     </div>
                 </div>
-
                 <div class="alert alert-info">
                     <strong>📋 Como Usar:</strong>
                     <ol style="margin: 10px 0 0 20px;">
                         <li>Vá para a aba <strong>📝 Cadastro</strong> e adicione os atletas. (Mínimo 3 por categoria).</li>
                         <li>Quando todos estiverem cadastrados, volte aqui e clique em <strong>▶ Iniciar Torneio</strong>.</li>
                         <li>Vá para a aba <strong>👥 Grupos</strong>, selecione a categoria e gere os grupos.</li>
-                        <li>Registre os resultados na aba <strong>🏓 Jogos Grupo</strong>. (Funcionalidade futura)</li>
+                        <li>Vá para a aba <strong>🏓 Jogos Grupo</strong>, selecione a categoria para ver os jogos.</li>
+                        <li>Registre os resultados (funcionalidade futura).</li>
                         <li>O sistema calculará a classificação e montará as <strong>🏆 Eliminatórias</strong>. (Funcionalidade futura)</li>
-                        <li>Visualize o <strong>📊 Ranking</strong> final e exporte <strong>📄 Relatórios</strong>. (Funcionalidade futura)</li>
                     </ol>
                 </div>
-
                 <h2>Categorias Cadastradas</h2>
                 <div class="grid-3">
-                    <div class="info-card">
-                        <h4>🏓 Sub 13</h4>
-                        <p id="count-sub13">Atletas: 0</p>
-                    </div>
-                    <div class="info-card">
-                        <h4>🏓 Sub 15</h4>
-                        <p id="count-sub15">Atletas: 0</p>
-                    </div>
-                    <div class="info-card">
-                        <h4>🏓 Sub 19</h4>
-                        <p id="count-sub19">Atletas: 0</p>
-                    </div>
-                    <div class="info-card">
-                        <h4>🏓 Adulto A</h4>
-                        <p id="count-adultoA">Atletas: 0</p>
-                    </div>
-                    <div class="info-card">
-                        <h4>🏓 Adulto B</h4>
-                        <p id="count-adultoB">Atletas: 0</p>
-                    </div>
-                    <div class="info-card">
-                        <h4>🏓 Veterano</h4>
-                        <p id="count-veterano">Atletas: 0</p>
-                    </div>
-                    <div class="info-card">
-                        <h4>🏓 Feminino</h4>
-                        <p id="count-feminino">Atletas: 0</p>
-                    </div>
+                    <div class="info-card"><h4>🏓 Sub 13</h4><p id="count-sub13">Atletas: 0</p></div>
+                    <div class="info-card"><h4>🏓 Sub 15</h4><p id="count-sub15">Atletas: 0</p></div>
+                    <div class="info-card"><h4>🏓 Sub 19</h4><p id="count-sub19">Atletas: 0</p></div>
+                    <div class="info-card"><h4>🏓 Adulto A</h4><p id="count-adultoA">Atletas: 0</p></div>
+                    <div class="info-card"><h4>🏓 Adulto B</h4><p id="count-adultoB">Atletas: 0</p></div>
+                    <div class="info-card"><h4>🏓 Veterano</h4><p id="count-veterano">Atletas: 0</p></div>
+                    <div class="info-card"><h4>🏓 Feminino</h4><p id="count-feminino">Atletas: 0</p></div>
                 </div>
             </div>
 
             <div id="cadastro" class="page">
                 <h2>Cadastro de Atletas</h2>
                 <div class="alert alert-info">Cadastre atletas com nome e ranking inicial (1 = melhor posição)</div>
-                
                 <div class="form-group">
                     <label>Nome do Atleta *</label>
                     <input type="text" id="athleteName" placeholder="Digite o nome completo">
                 </div>
-                
                 <div class="form-group">
                     <label>Ranking Inicial * (1, 2, 3...)</label>
                     <input type="number" id="athleteRanking" placeholder="Digite o ranking (ex: 1)" min="1" value="1">
                 </div>
-                
                 <div class="form-group">
                     <label>Categoria *</label>
                     <select id="athleteCategory">
@@ -339,58 +307,51 @@
                         <option value="feminino">Feminino</option>
                     </select>
                 </div>
-                
                 <button class="btn btn-success" onclick="addAthlete()">✓ Cadastrar Atleta</button>
-
                 <hr style="margin: 30px 0;">
-
                 <h2>Atletas Cadastrados</h2>
                 <div class="alert alert-warning" id="no-athletes-warning">Nenhum atleta cadastrado ainda.</div>
                 <table id="athletes-table" style="display:none;">
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Categoria</th>
-                            <th>Ranking</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="athletes-table-body">
-                        </tbody>
+                    <thead><tr><th>Nome</th><th>Categoria</th><th>Ranking</th><th>Ações</th></tr></thead>
+                    <tbody id="athletes-table-body"></tbody>
                 </table>
-
             </div>
 
             <div id="grupos" class="page">
                 <h2>Gerenciamento de Grupos</h2>
                 <div class="alert alert-info">Selecione a categoria e clique em "Gerar Grupos" para aplicar o "Snake System" dinâmico.</div>
-                
                 <div class="form-group" style="max-width: 500px;">
                     <label>Selecione a Categoria:</label>
                     <select id="group-category-select">
                         <option value="">-- Nenhuma categoria com atletas --</option>
                     </select>
                 </div>
-                
                 <button class="btn btn-success" onclick="generateGroups()">👥 Gerar Grupos</button>
-                
                 <hr style="margin: 30px 0;">
-                
-                <div id="group-info-area">
-                    </div>
-                
-                <div id="group-display-area" class="group-container">
-                    </div>
+                <div id="group-info-area"></div>
+                <div id="group-display-area" class="group-container"></div>
             </div>
             
             <div id="jogos" class="page">
                 <h2>Resultados dos Jogos (Fase de Grupos)</h2>
-                <div class="alert alert-warning">Esta funcionalidade (registro de placares) será implementada em breve.</div>
+                <div class="alert alert-info">Selecione a categoria para ver os jogos. Os jogos são listados na ordem oficial definida.</div>
+
+                <div class="form-group" style="max-width: 500px;">
+                    <label>Selecione a Categoria:</label>
+                    <select id="games-category-select" onchange="renderGroupMatches()">
+                        <option value="">-- Nenhum grupo gerado --</option>
+                    </select>
                 </div>
+                
+                <hr style="margin: 30px 0;">
+                
+                <div id="games-display-area">
+                    </div>
+            </div>
 
             <div id="eliminatorias" class="page">
                 <h2>Fase Eliminatória (Mata-Mata)</h2>
-                <div class="alert alert-warning">Esta funcionalidade (bracket de eliminatórias) será implementada em breve.</div>
+                <div class="alert alert-warning">Esta funcionalidade (cálculo de classificação e bracket) será implementada em breve.</div>
                 </div>
 
             <div id="ranking" class="page">
@@ -414,7 +375,33 @@
         let tournamentActive = false;
         
         // Guarda os dados dos grupos e jogos por categoria
+        // Ex: { adultoA: { groups: [...], matches: [...], elimination: ... } }
         let tournamentData = {};
+        
+        // NOVO: Armazena as regras de chaveamento (eliminatórias)
+        const knockoutPairings = {
+            '2_groups': [ // Semifinal
+                { p1_source: '1A', p2_source: '2B' },
+                { p1_source: '1B', p2_source: '2A' }
+            ],
+            '4_groups': [ // Quartas de Final
+                { p1_source: '1A', p2_source: '2D' },
+                { p1_source: '1C', p2_source: '2B' },
+                { p1_source: '1B', p2_source: '2C' },
+                { p1_source: '1D', p2_source: '2A' }
+            ],
+            '8_groups': [ // Oitavas de Final
+                { p1_source: '1A', p2_source: '2H' },
+                { p1_source: '1G', p2_source: '2B' },
+                { p1_source: '1D', p2_source: '2E' },
+                { p1_source: '1F', p2_source: '2C' },
+                { p1_source: '1B', p2_source: '2G' },
+                { p1_source: '1H', p2_source: '2A' },
+                { p1_source: '1C', p2_source: '2F' },
+                { p1_source: '1E', p2_source: '2D' }
+            ]
+        };
+
 
         // -----------------------------------------------------------------
         // PASSO 2: FUNÇÃO DE NAVEGAÇÃO
@@ -437,14 +424,19 @@
                     btn.classList.add('active');
                 }
             });
-
+            
+            // ATUALIZADO: Popula o seletor correto para a página
             if (pageId === 'grupos') {
                 populateGroupCategorySelector();
+            } else if (pageId === 'jogos') {
+                populateGamesCategorySelector();
+                renderGroupMatches(); // Tenta renderizar (vai mostrar nada se nada tiver selecionado)
             }
         }
 
         // -----------------------------------------------------------------
         // PASSO 3: FUNÇÕES DA PÁGINA "CADASTRO"
+        // (Sem alterações)
         // -----------------------------------------------------------------
         
         function addAthlete() {
@@ -452,40 +444,19 @@
                 alert('Erro: Não é possível cadastrar atletas após o início do torneio.');
                 return;
             }
-
             const name = document.getElementById('athleteName').value.trim();
             const ranking = parseInt(document.getElementById('athleteRanking').value);
             const category = document.getElementById('athleteCategory').value;
-
-            if (name === '') {
-                alert('Erro: Por favor, digite o nome do atleta.');
-                return;
-            }
-            if (isNaN(ranking) || ranking <= 0) {
-                alert('Erro: Por favor, digite um ranking inicial válido (maior que 0).');
-                return;
-            }
-
+            if (name === '') { alert('Erro: Por favor, digite o nome do atleta.'); return; }
+            if (isNaN(ranking) || ranking <= 0) { alert('Erro: Por favor, digite um ranking inicial válido (maior que 0).'); return; }
             const duplicateRanking = athletes.find(a => a.category === category && a.ranking === ranking);
-            if (duplicateRanking) {
-                alert(`Erro: Já existe um atleta (${duplicateRanking.name}) com o ranking ${ranking} na categoria ${category}.`);
-                return;
-            }
-
-            const newAthlete = {
-                id: Date.now(), 
-                name: name,
-                ranking: ranking,
-                category: category
-            };
-
+            if (duplicateRanking) { alert(`Erro: Já existe um atleta (${duplicateRanking.name}) com o ranking ${ranking} na categoria ${category}.`); return; }
+            const newAthlete = { id: Date.now(), name: name, ranking: ranking, category: category };
             athletes.push(newAthlete);
             alert(`Atleta ${name} cadastrado com sucesso na categoria ${category}!`);
-
             document.getElementById('athleteName').value = '';
             document.getElementById('athleteRanking').value = 1;
             document.getElementById('athleteName').focus(); 
-
             updateDashboardCounts();
             renderAthletesTable();
         }
@@ -494,24 +465,13 @@
             const tableBody = document.getElementById('athletes-table-body');
             const table = document.getElementById('athletes-table');
             const warning = document.getElementById('no-athletes-warning');
-            
             tableBody.innerHTML = ''; 
-
-            if (athletes.length === 0) {
-                table.style.display = 'none';
-                warning.style.display = 'block';
-                return;
-            }
-            
-            table.style.display = 'table';
-            warning.style.display = 'none';
-
+            if (athletes.length === 0) { table.style.display = 'none'; warning.style.display = 'block'; return; }
+            table.style.display = 'table'; warning.style.display = 'none';
             const sortedAthletes = [...athletes].sort((a, b) => {
-                if (a.category < b.category) return -1;
-                if (a.category > b.category) return 1;
+                if (a.category < b.category) return -1; if (a.category > b.category) return 1;
                 return a.ranking - b.ranking;
             });
-
             sortedAthletes.forEach(athlete => {
                 const categoryName = getCategoryDisplayName(athlete.category);
                 const row = `
@@ -519,47 +479,28 @@
                         <td>${athlete.name}</td>
                         <td>${categoryName}</td>
                         <td>${athlete.ranking}</td>
-                        <td>
-                            <button class="btn btn-danger" style="padding: 5px 10px;" onclick="removeAthlete(${athlete.id})">
-                                X
-                            </button>
-                        </td>
-                    </tr>
-                `;
+                        <td><button class="btn btn-danger" style="padding: 5px 10px;" onclick="removeAthlete(${athlete.id})">X</button></td>
+                    </tr>`;
                 tableBody.innerHTML += row;
             });
         }
         
         function removeAthlete(athleteId) {
-            if (tournamentActive) {
-                alert('Erro: Não é possível remover atletas após o início do torneio.');
-                return;
-            }
-
+            if (tournamentActive) { alert('Erro: Não é possível remover atletas após o início do torneio.'); return; }
             if (confirm('Tem certeza que deseja remover este atleta?')) {
                 athletes = athletes.filter(athlete => athlete.id !== athleteId);
-                renderAthletesTable();
-                updateDashboardCounts();
+                renderAthletesTable(); updateDashboardCounts();
             }
         }
         
         // -----------------------------------------------------------------
         // PASSO 4: FUNÇÕES DA PÁGINA "INÍCIO" (DASHBOARD)
+        // (Sem alterações)
         // -----------------------------------------------------------------
 
         function updateDashboardCounts() {
-            const counts = {
-                sub13: 0, sub15: 0, sub19: 0,
-                adultoA: 0, adultoB: 0, veterano: 0,
-                feminino: 0
-            };
-
-            athletes.forEach(athlete => {
-                if (counts.hasOwnProperty(athlete.category)) {
-                    counts[athlete.category]++;
-                }
-            });
-
+            const counts = { sub13: 0, sub15: 0, sub19: 0, adultoA: 0, adultoB: 0, veterano: 0, feminino: 0 };
+            athletes.forEach(athlete => { if (counts.hasOwnProperty(athlete.category)) { counts[athlete.category]++; } });
             document.getElementById('count-sub13').textContent = `Atletas: ${counts.sub13}`;
             document.getElementById('count-sub15').textContent = `Atletas: ${counts.sub15}`;
             document.getElementById('count-sub19').textContent = `Atletas: ${counts.sub19}`;
@@ -570,23 +511,15 @@
         }
         
         function startTournament() {
-            if (athletes.length === 0) {
-                alert('Erro: Cadastre pelo menos um atleta antes de iniciar o torneio.');
-                return;
-            }
-            
+            if (athletes.length === 0) { alert('Erro: Cadastre pelo menos um atleta antes de iniciar o torneio.'); return; }
             if (confirm('Deseja realmente iniciar o torneio? O cadastro de novos atletas será bloqueado.')) {
                 tournamentActive = true;
-                
                 const statusBadge = document.getElementById('tournamentStatus');
                 statusBadge.textContent = 'Em Andamento';
-                statusBadge.classList.remove('status-inactive');
-                statusBadge.classList.add('status-active');
-                
+                statusBadge.classList.remove('status-inactive'); statusBadge.classList.add('status-active');
                 document.getElementById('athleteName').disabled = true;
                 document.getElementById('athleteRanking').disabled = true;
                 document.getElementById('athleteCategory').disabled = true;
-
                 alert('Torneio iniciado! Boa sorte a todos os atletas!');
                 showPage('grupos');
             }
@@ -596,8 +529,7 @@
             tournamentActive = false;
             const statusBadge = document.getElementById('tournamentStatus');
             statusBadge.textContent = 'Finalizado';
-            statusBadge.classList.remove('status-active');
-            statusBadge.classList.add('status-inactive');
+            statusBadge.classList.remove('status-active'); statusBadge.classList.add('status-inactive');
             alert('Torneio finalizado!');
         }
 
@@ -606,248 +538,272 @@
                 athletes = [];
                 tournamentActive = false;
                 tournamentData = {};
-                
                 const statusBadge = document.getElementById('tournamentStatus');
                 statusBadge.textContent = 'Não Iniciado';
-                statusBadge.classList.remove('status-active');
-                statusBadge.classList.add('status-inactive');
-                
+                statusBadge.classList.remove('status-active'); statusBadge.classList.add('status-inactive');
                 document.getElementById('athleteName').disabled = false;
                 document.getElementById('athleteRanking').disabled = false;
                 document.getElementById('athleteCategory').disabled = false;
-                
                 document.getElementById('athleteName').value = '';
                 document.getElementById('athleteRanking').value = 1;
-                
                 updateDashboardCounts();
                 renderAthletesTable();
-
                 document.getElementById('group-display-area').innerHTML = '';
-                document.getElementById('group-info-area').innerHTML = ''; // Limpa info
-                
+                document.getElementById('group-info-area').innerHTML = '';
+                document.getElementById('games-display-area').innerHTML = ''; // NOVO: Limpa jogos
                 alert('Sistema resetado! Pronto para um novo torneio.');
                 showPage('home');
             }
         }
         
         // -----------------------------------------------------------------
-        // PASSO 5: (ATUALIZADO) FUNÇÕES DA PÁGINA "GRUPOS"
+        // PASSO 5: FUNÇÕES DA PÁGINA "GRUPOS"
         // -----------------------------------------------------------------
         
         function populateGroupCategorySelector() {
             const select = document.getElementById('group-category-select');
             select.innerHTML = ''; 
-
             const categoriesInUse = [...new Set(athletes.map(a => a.category))];
-
             if (categoriesInUse.length === 0) {
-                select.innerHTML = '<option value="">-- Nenhum atleta cadastrado --</option>';
-                return;
+                select.innerHTML = '<option value="">-- Nenhum atleta cadastrado --</option>'; return;
             }
-
             categoriesInUse.forEach(category => {
                 const categoryName = getCategoryDisplayName(category);
-                const option = `<option value="${category}">${categoryName}</option>`;
-                select.innerHTML += option;
+                select.innerHTML += `<option value="${category}">${categoryName}</option>`;
             });
         }
         
         /**
-         * ATUALIZADO: Função principal para gerar os grupos com a nova lógica dinâmica.
+         * ATUALIZADO: Agora também chama generateGroupMatches()
          */
         function generateGroups() {
-            if (!tournamentActive) {
-                alert('Erro: Você deve "Iniciar o Torneio" na página Início antes de gerar os grupos.');
-                return;
-            }
-
+            if (!tournamentActive) { alert('Erro: Você deve "Iniciar o Torneio" na página Início antes de gerar os grupos.'); return; }
             const selectedCategory = document.getElementById('group-category-select').value;
-            if (!selectedCategory) {
-                alert('Erro: Selecione uma categoria válida.');
-                return;
-            }
+            if (!selectedCategory) { alert('Erro: Selecione uma categoria válida.'); return; }
             
-            // Limpa a tela antes de gerar
             const displayArea = document.getElementById('group-display-area');
             const infoArea = document.getElementById('group-info-area');
-            displayArea.innerHTML = '';
-            infoArea.innerHTML = '';
-            
-            // Reseta os dados dessa categoria
+            displayArea.innerHTML = ''; infoArea.innerHTML = '';
             tournamentData[selectedCategory] = {}; 
 
-            // Filtra e ordena atletas
-            const categoryAthletes = athletes
-                .filter(a => a.category === selectedCategory)
-                .sort((a, b) => a.ranking - b.ranking); // Ordena por ranking (1, 2, 3...)
-
+            const categoryAthletes = athletes.filter(a => a.category === selectedCategory).sort((a, b) => a.ranking - b.ranking);
             const n = categoryAthletes.length;
-            let numGroups = 0;
-            let infoMessage = "";
-            let eliminationPhase = "";
+            let numGroups = 0, infoMessage = "", eliminationPhase = "";
 
-            // APLICAÇÃO DAS NOVAS REGRAS (COM AJUSTE N=15 e N=16)
-            if (n < 3) {
-                infoArea.appendChild(createAlertElement('Erro: A categoria precisa de no mínimo 3 atletas para acontecer.', 'alert-danger'));
-                return;
-            } 
-            else if (n === 3) {
-                // REGRA N=3: Grupo Único
-                numGroups = 1;
-                eliminationPhase = "Nenhum (Round Robin)";
-                infoMessage = `Formato: ${n} atletas. Grupo Único. Todos jogam contra todos.`;
-            } 
-            else if (n >= 4 && n <= 7) {
-                // REGRA N=4 a 7: 2 Grupos -> Semifinal
-                numGroups = 2;
-                eliminationPhase = "Semifinal";
-                infoMessage = `Formato: ${n} atletas em ${numGroups} grupos. Os 2 melhores de cada grupo avançam para a ${eliminationPhase}.`;
-            } 
-            else if (n >= 8 && n <= 15) { // <<< REGRA ALTERADA AQUI
-                // REGRA N=8 a 15: 4 Grupos -> Quartas de Final
-                numGroups = 4;
-                eliminationPhase = "Quartas de Final";
-                infoMessage = `Formato: ${n} atletas em ${numGroups} grupos. Os 2 melhores de cada grupo avançam para as ${eliminationPhase}.`;
-            } 
-            else if (n >= 16 && n <= 24) { // <<< REGRA ALTERADA AQUI
-                // REGRA N=16 a 24: 8 Grupos -> Oitavas de Final
-                numGroups = 8;
-                eliminationPhase = "Oitavas de Final";
-                infoMessage = `Formato: ${n} atletas em ${numGroups} grupos. Os 2 melhores de cada grupo avançam para as ${eliminationPhase}.`;
-            } 
-            else {
-                // REGRA N > 24
-                infoArea.appendChild(createAlertElement(`Erro: O sistema (baseado no regulamento) suporta um máximo de 24 atletas. Esta categoria tem ${n}.`, 'alert-danger'));
-                return;
-            }
+            if (n < 3) { infoArea.appendChild(createAlertElement('Erro: A categoria precisa de no mínimo 3 atletas para acontecer.', 'alert-danger')); return; } 
+            else if (n === 3) { numGroups = 1; eliminationPhase = "Nenhum (Round Robin)"; infoMessage = `Formato: ${n} atletas. Grupo Único. Todos jogam contra todos.`; } 
+            else if (n >= 4 && n <= 7) { numGroups = 2; eliminationPhase = "Semifinal"; infoMessage = `Formato: ${n} atletas em ${numGroups} grupos. Os 2 melhores de cada grupo avançam para a ${eliminationPhase}.`; } 
+            else if (n >= 8 && n <= 15) { numGroups = 4; eliminationPhase = "Quartas de Final"; infoMessage = `Formato: ${n} atletas em ${numGroups} grupos. Os 2 melhores de cada grupo avançam para as ${eliminationPhase}.`; } 
+            else if (n >= 16 && n <= 24) { numGroups = 8; eliminationPhase = "Oitavas de Final"; infoMessage = `Formato: ${n} atletas em ${numGroups} grupos. Os 2 melhores de cada grupo avançam para as ${eliminationPhase}.`; } 
+            else { infoArea.appendChild(createAlertElement(`Erro: O sistema (baseado no regulamento) suporta um máximo de 24 atletas. Esta categoria tem ${n}.`, 'alert-danger')); return; }
             
-            // Exibe a mensagem de informação
             infoArea.appendChild(createAlertElement(infoMessage, 'alert-info'));
             
-            // Chama a nova função para distribuir os atletas
             const generatedGroups = distributeSnake(categoryAthletes, numGroups);
+            
+            // NOVO: Gera a lista de jogos imediatamente
+            const generatedMatches = generateGroupMatches(generatedGroups);
 
-            // Salva os dados
             tournamentData[selectedCategory] = {
                 groups: generatedGroups,
+                matches: generatedMatches, // Salva os jogos
                 elimination: eliminationPhase,
                 info: infoMessage
             };
             
-            // Desenha os grupos na tela
             renderGroups(generatedGroups, displayArea);
+            
+            // NOVO: Atualiza a lista da página "Jogos" para que o usuário possa ir direto para lá
+            populateGamesCategorySelector();
         }
         
-        /**
-         * Aplica o "Snake System" dinamicamente para N atletas em K grupos.
-         */
         function distributeSnake(athletesSorted, numGroups) {
-            // 1. Cria 'K' grupos vazios
             const groups = Array.from({ length: numGroups }, () => []);
-            
-            // 2. Distribui os atletas
             athletesSorted.forEach((athlete, index) => {
                 const round = Math.floor(index / numGroups);
                 const positionInRound = index % numGroups;
-                
-                let groupIndex;
-                
-                if (round % 2 === 0) {
-                    // Direção normal (0, 1, 2, ...)
-                    groupIndex = positionInRound;
-                } else {
-                    // Direção reversa (K-1, K-2, ..., 0)
-                    groupIndex = (numGroups - 1) - positionInRound;
-                }
-                
+                let groupIndex = (round % 2 === 0) ? positionInRound : (numGroups - 1) - positionInRound;
                 groups[groupIndex].push(athlete);
             });
-            
             return groups;
         }
 
-        /**
-         * Desenha os grupos na tela.
-         */
         function renderGroups(groups, displayArea) {
             if (!groups || groups.length === 0) return;
-
             groups.forEach((group, index) => {
                 if (group.length === 0) return; 
-
                 const groupLetter = (groups.length > 1) ? String.fromCharCode(65 + index) : "Único";
-                
-                const playersHtml = group.map(player => 
-                    `<li><span>${player.name}</span> <small>(Rank: ${player.ranking})</small></li>`
-                ).join('');
-
+                const playersHtml = group.map(player => `<li><span>${player.name}</span> <small>(Rank: ${player.ranking})</small></li>`).join('');
                 const groupCardHtml = `
                     <div class="group-bracket">
                         <h3>Grupo ${groupLetter}</h3>
-                        <ul class="group-player-list">
-                            ${playersHtml}
-                        </ul>
-                    </div>
-                `;
+                        <ul class="group-player-list"> ${playersHtml} </ul>
+                    </div>`;
                 displayArea.innerHTML += groupCardHtml;
             });
         }
-
-
+        
         // -----------------------------------------------------------------
-        // PASSO 6: FUNÇÕES DA PÁGINA "RELATÓRIOS" (PDF)
+        // PASSO 6: (NOVO) FUNÇÕES DA PÁGINA "JOGOS GRUPO"
+        // -----------------------------------------------------------------
+
+        /**
+         * NOVO: Popula o seletor da página "Jogos" apenas com categorias
+         * que já tiveram seus grupos gerados.
+         */
+        function populateGamesCategorySelector() {
+            const select = document.getElementById('games-category-select');
+            const currentSelection = select.value; // Salva a seleção atual
+            select.innerHTML = ''; 
+            
+            // Encontra categorias que têm grupos gerados em tournamentData
+            const categoriesWithGroups = Object.keys(tournamentData).filter(
+                key => tournamentData[key].groups && tournamentData[key].groups.length > 0
+            );
+
+            if (categoriesWithGroups.length === 0) {
+                select.innerHTML = '<option value="">-- Nenhum grupo gerado --</option>';
+                return;
+            }
+
+            select.innerHTML = '<option value="">-- Selecione a categoria --</option>';
+            categoriesWithGroups.forEach(category => {
+                const categoryName = getCategoryDisplayName(category);
+                const isSelected = category === currentSelection ? 'selected' : '';
+                select.innerHTML += `<option value="${category}" ${isSelected}>${categoryName}</option>`;
+            });
+        }
+        
+        /**
+         * NOVO: Cria a lista de jogos com base nas regras de ordem.
+         */
+        function generateGroupMatches(groups) {
+            let allMatches = [];
+            
+            groups.forEach((group, index) => {
+                const groupName = (groups.length > 1) ? String.fromCharCode(65 + index) : "Único";
+                
+                // IMPORTANTE: Ordena os jogadores DENTRO do grupo pelo ranking
+                // para sabermos quem é o P1, P2, P3, P4
+                const sortedPlayers = [...group].sort((a, b) => a.ranking - b.ranking);
+                
+                const n = sortedPlayers.length;
+                const p = sortedPlayers; // p[0] é o rank 1, p[1] é o rank 2...
+                let groupMatches = [];
+
+                // Gera um ID único para cada partida
+                const createMatch = (p1, p2) => ({
+                    id: `m_${p1.id}_${p2.id}`, // ID único do jogo
+                    group: groupName,
+                    p1: p1,
+                    p2: p2,
+                    score1: null,
+                    score2: null,
+                    done: false
+                });
+
+                if (n === 3) {
+                    // Ordem: 1x3, 2x3, 1x2
+                    groupMatches.push(createMatch(p[0], p[2]));
+                    groupMatches.push(createMatch(p[1], p[2]));
+                    groupMatches.push(createMatch(p[0], p[1]));
+                } else if (n === 4) {
+                    // Ordem: 1x4, 2x3, 1x3, 2x4, 1x2, 3x4
+                    groupMatches.push(createMatch(p[0], p[3]));
+                    groupMatches.push(createMatch(p[1], p[2]));
+                    groupMatches.push(createMatch(p[0], p[2]));
+                    groupMatches.push(createMatch(p[1], p[3]));
+                    groupMatches.push(createMatch(p[0], p[1]));
+                    groupMatches.push(createMatch(p[2], p[3])); // Correção do lapso
+                } else if (n > 1) {
+                    // Fallback para outros tamanhos (ex: 2, 5, 6, 7)
+                    // Gera todos contra todos em ordem padrão
+                    for (let i = 0; i < n; i++) {
+                        for (let j = i + 1; j < n; j++) {
+                            groupMatches.push(createMatch(p[i], p[j]));
+                        }
+                    }
+                }
+                
+                allMatches = allMatches.concat(groupMatches);
+            });
+            
+            return allMatches;
+        }
+
+        /**
+         * NOVO: Desenha os "cards de jogo" na página "Jogos Grupo".
+         */
+        function renderGroupMatches() {
+            const selectedCategory = document.getElementById('games-category-select').value;
+            const displayArea = document.getElementById('games-display-area');
+            displayArea.innerHTML = ''; // Limpa a área
+
+            if (!selectedCategory || !tournamentData[selectedCategory] || !tournamentData[selectedCategory].matches) {
+                displayArea.innerHTML = '<div class="alert alert-warning">Selecione uma categoria para ver os jogos.</div>';
+                return;
+            }
+
+            const matches = tournamentData[selectedCategory].matches;
+
+            matches.forEach((match, index) => {
+                const matchCard = document.createElement('div');
+                matchCard.className = 'game-card';
+                // Adiciona um ID ao card para fácil atualização
+                matchCard.id = `game_card_${match.id}`; 
+                
+                // (Futuro) Aqui virá a função para salvar os placares
+                // onclick="saveMatchResult('${selectedCategory}', '${match.id}')"
+                const saveButton = `<button class="btn btn-success" style="padding: 8px 15px;">Salvar</button>`;
+
+                matchCard.innerHTML = `
+                    <h4>Jogo ${index + 1} (Grupo ${match.group})</h4>
+                    <div class="player-row">
+                        <span class="player-name">${match.p1.name}</span>
+                        <input type="number" class="score-input" id="score_${match.id}_p1" min="0" max="3">
+                    </div>
+                    <div class="player-row">
+                        <span class="player-name">${match.p2.name}</span>
+                        <input type="number" class="score-input" id="score_${match.id}_p2" min="0" max="3">
+                    </div>
+                    <div style="text-align: right; margin-top: 10px;">
+                        ${saveButton} 
+                    </div>
+                `;
+                displayArea.appendChild(matchCard);
+            });
+        }
+        
+        // -----------------------------------------------------------------
+        // PASSO 7: FUNÇÕES DA PÁGINA "RELATÓRIOS" (PDF)
+        // (Sem alterações)
         // -----------------------------------------------------------------
         
         function generateAthleteReport() {
-            if (typeof window.jspdf === 'undefined' || typeof window.jspdf.jsPDF === 'undefined') {
-                alert('Erro: A biblioteca jsPDF não carregou. Verifique a conexão com a internet.');
-                return;
-            }
+            if (typeof window.jspdf === 'undefined' || typeof window.jspdf.jsPDF === 'undefined') { alert('Erro: A biblioteca jsPDF não carregou. Verifique a conexão com a internet.'); return; }
             const { jsPDF } = window.jspdf;
-            
-            if (athletes.length === 0) {
-                alert('Não há atletas cadastrados para gerar o relatório.');
-                return;
-            }
-
+            if (athletes.length === 0) { alert('Não há atletas cadastrados para gerar o relatório.'); return; }
             const doc = new jsPDF();
             doc.text("Relatório de Atletas Cadastrados - CTB", 10, 10);
-
-            const tableData = athletes.map(a => [
-                a.name, 
-                getCategoryDisplayName(a.category),
-                a.ranking
-            ]);
-            
-            doc.autoTable({
-                head: [['Nome', 'Categoria', 'Ranking']],
-                body: tableData,
-                startY: 20,
-            });
-
+            const tableData = athletes.map(a => [ a.name, getCategoryDisplayName(a.category), a.ranking ]);
+            doc.autoTable({ head: [['Nome', 'Categoria', 'Ranking']], body: tableData, startY: 20 });
             doc.save('relatorio_atletas_ctb.pdf');
         }
 
         // -----------------------------------------------------------------
-        // PASSO 7: FUNÇÕES AUXILIARES
+        // PASSO 8: FUNÇÕES AUXILIARES
+        // (Sem alterações)
         // -----------------------------------------------------------------
         
         function getCategoryDisplayName(categoryKey) {
             const names = {
-                sub13: 'Sub 13',
-                sub15: 'Sub 15',
-                sub19: 'Sub 19',
-                adultoA: 'Adulto A',
-                adultoB: 'Adulto B',
-                veterano: 'Veterano',
+                sub13: 'Sub 13', sub15: 'Sub 15', sub19: 'Sub 19',
+                adultoA: 'Adulto A', adultoB: 'Adulto B', veterano: 'Veterano',
                 feminino: 'Feminino'
             };
             return names[categoryKey] || categoryKey;
         }
         
-        /**
-         * Cria um elemento de alerta (div) para ser injetado no HTML.
-         */
         function createAlertElement(message, type = 'alert-info') {
             const alertDiv = document.createElement('div');
             alertDiv.className = `alert ${type}`;
@@ -856,7 +812,7 @@
         }
 
         // -----------------------------------------------------------------
-        // PASSO 8: INICIALIZAÇÃO
+        // PASSO 9: INICIALIZAÇÃO
         // -----------------------------------------------------------------
         
         document.addEventListener('DOMContentLoaded', () => {
