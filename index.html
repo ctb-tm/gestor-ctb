@@ -30,6 +30,7 @@
             color: white;
             padding: 30px;
             text-align: center;
+            position: relative;
         }
 
         header img {
@@ -109,6 +110,11 @@
             font-size: 1em;
         }
 
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
         .btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -132,6 +138,7 @@
         .btn-danger { background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%); }
         .btn-warning { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
         .btn-info { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .btn-small { padding: 8px 15px; font-size: 0.9em; }
 
         table {
             width: 100%;
@@ -149,7 +156,7 @@
         }
 
         table th, table td {
-            padding: 15px;
+            padding: 12px;
             text-align: left;
             border-bottom: 1px solid #eee;
         }
@@ -172,11 +179,13 @@
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s;
+            font-weight: 600;
         }
 
         .category-tab.active {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
+            border-color: #667eea;
         }
 
         .alert {
@@ -189,16 +198,19 @@
         .alert-success {
             background: #d4edda;
             color: #155724;
+            border: 1px solid #c3e6cb;
         }
 
         .alert-info {
             background: #d1ecf1;
             color: #0c5460;
+            border: 1px solid #bee5eb;
         }
 
         .alert-warning {
             background: #fff3cd;
             color: #856404;
+            border: 1px solid #ffeaa7;
         }
 
         .game-card {
@@ -210,11 +222,17 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
+        .game-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
         .game-result {
             display: flex;
             align-items: center;
             gap: 15px;
             margin: 10px 0;
+            flex-wrap: wrap;
         }
 
         .game-result input {
@@ -243,6 +261,7 @@
             padding: 8px 15px;
             border-radius: 20px;
             font-weight: 600;
+            font-size: 0.9em;
         }
 
         .status-active { background: #38ef7d; color: white; }
@@ -254,8 +273,14 @@
             gap: 20px;
         }
 
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+
         @media (max-width: 768px) {
-            .grid-2 { grid-template-columns: 1fr; }
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
             nav { flex-direction: column; }
         }
 
@@ -267,6 +292,12 @@
             border: 2px solid #eee;
             border-radius: 8px;
             margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+
+        .ranking-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .ranking-position {
@@ -274,7 +305,8 @@
             font-weight: bold;
             color: #667eea;
             margin-right: 20px;
-            min-width: 50px;
+            min-width: 60px;
+            text-align: center;
         }
 
         .medal { font-size: 2em; margin-right: 15px; }
@@ -284,25 +316,91 @@
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 20px;
+            border: 2px solid #667eea;
+        }
+
+        .group-bracket h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .match-item {
+            background: white;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .player-name {
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .score-input {
+            width: 60px;
+            padding: 5px;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            margin: 0 5px;
+        }
+
+        .winner {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+
+        .info-card {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 15px;
+        }
+
+        .info-card h4 {
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .bracket-stage {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #ddd;
+        }
+
+        .bracket-stage h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.5em;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <img src="ctb.png" alt="CTB Logo" onerror="this.style.display='none'">
+            <img src="ctb.png" alt="CTB Logo" onerror="this.style.display='none'" id="logo">
             <h1>CTB - Clube dos Tenistas da Bahia</h1>
             <p>Sistema de Gestão de Torneios de Tênis de Mesa</p>
         </header>
 
         <nav>
-            <button onclick="showPage('home')" class="nav-btn active">Início</button>
-            <button onclick="showPage('cadastro')" class="nav-btn">Cadastro</button>
-            <button onclick="showPage('grupos')" class="nav-btn">Grupos</button>
-            <button onclick="showPage('jogos')" class="nav-btn">Jogos</button>
-            <button onclick="showPage('eliminatorias')" class="nav-btn">Eliminatórias</button>
-            <button onclick="showPage('ranking')" class="nav-btn">Ranking</button>
-            <button onclick="showPage('relatorios')" class="nav-btn">Relatórios</button>
+            <button onclick="showPage('home')" class="nav-btn active">🏠 Início</button>
+            <button onclick="showPage('cadastro')" class="nav-btn">📝 Cadastro</button>
+            <button onclick="showPage('grupos')" class="nav-btn">👥 Grupos</button>
+            <button onclick="showPage('jogos')" class="nav-btn">🏓 Jogos</button>
+            <button onclick="showPage('eliminatorias')" class="nav-btn">🏆 Eliminatórias</button>
+            <button onclick="showPage('ranking')" class="nav-btn">📊 Ranking</button>
+            <button onclick="showPage('relatorios')" class="nav-btn">📄 Relatórios</button>
         </nav>
 
         <div class="content">
@@ -310,76 +408,29 @@
             <div id="home" class="page active">
                 <div class="control-panel">
                     <div>
-                        <h2 style="color: white;">Controle do Torneio</h2>
+                        <h2 style="color: white; margin-bottom: 10px;">Controle do Torneio</h2>
                         <span class="status-badge status-inactive" id="tournamentStatus">Não Iniciado</span>
                     </div>
                     <div>
-                        <button class="btn btn-success" onclick="startTournament()">▶ Iniciar</button>
-                        <button class="btn btn-danger" onclick="finalizeTournament()">⏹ Finalizar</button>
-                        <button class="btn btn-warning" onclick="resetTournament()">🔄 Resetar</button>
+                        <button class="btn btn-success" onclick="startTournament()">▶ Iniciar Torneio</button>
+                        <button class="btn btn-danger" onclick="finalizeTournament()">⏹ Finalizar Torneio</button>
+                        <button class="btn btn-warning" onclick="resetTournament()">🔄 Resetar Sistema</button>
                     </div>
                 </div>
 
-                <h2>Categorias Disponíveis</h2>
-                <div class="grid-2" style="margin-top: 20px;">
-                    <div style="background: #f8f9ff; padding: 20px; border-radius: 10px;">
-                        <h3>🏓 Sub 13</h3>
-                        <p id="count-sub13">Atletas: 0</p>
-                    </div>
-                    <div style="background: #f8f9ff; padding: 20px; border-radius: 10px;">
-                        <h3>🏓 Sub 15</h3>
-                        <p id="count-sub15">Atletas: 0</p>
-                    </div>
-                    <div style="background: #f8f9ff; padding: 20px; border-radius: 10px;">
-                        <h3>🏓 Sub 19</h3>
-                        <p id="count-sub19">Atletas: 0</p>
-                    </div>
-                    <div style="background: #f8f9ff; padding: 20px; border-radius: 10px;">
-                        <h3>🏓 Adulto A</h3>
-                        <p id="count-adultoA">Atletas: 0</p>
-                    </div>
-                    <div style="background: #f8f9ff; padding: 20px; border-radius: 10px;">
-                        <h3>🏓 Adulto B</h3>
-                        <p id="count-adultoB">Atletas: 0</p>
-                    </div>
-                    <div style="background: #f8f9ff; padding: 20px; border-radius: 10px;">
-                        <h3>🏓 Veterano</h3>
-                        <p id="count-veterano">Atletas: 0</p>
-                    </div>
+                <div class="alert alert-info">
+                    <strong>Instruções:</strong>
+                    <ol style="margin-top: 10px; margin-left: 20px;">
+                        <li>Cadastre os atletas com nome e ranking inicial</li>
+                        <li>Clique em "Iniciar Torneio"</li>
+                        <li>Gere os grupos usando Snake System (baseado no ranking)</li>
+                        <li>Registre os resultados dos jogos</li>
+                        <li>Avance automaticamente para as eliminatórias</li>
+                        <li>Visualize o ranking final e exporte relatórios</li>
+                    </ol>
                 </div>
-            </div>
 
-            <!-- PÁGINA CADASTRO -->
-            <div id="cadastro" class="page">
-                <h2>Cadastro de Atletas</h2>
-                <div class="alert alert-info">Cadastre os atletas em suas respectivas categorias</div>
-                
-                <div class="form-group">
-                    <label>Nome do Atleta</label>
-                    <input type="text" id="athleteName" placeholder="Digite o nome completo">
-                </div>
-                
-                <div class="form-group">
-                    <label>Categoria</label>
-                    <select id="athleteCategory">
-                        <option value="sub13">Sub 13</option>
-                        <option value="sub15">Sub 15</option>
-                        <option value="sub19">Sub 19</option>
-                        <option value="adultoA">Adulto A</option>
-                        <option value="adultoB">Adulto B</option>
-                        <option value="veterano">Veterano</option>
-                    </select>
-                </div>
-                
-                <button class="btn btn-success" onclick="addAthlete()">✓ Cadastrar Atleta</button>
-                
-                <h3 style="margin-top: 30px;">Atletas Cadastrados</h3>
-                <div class="category-tabs" id="athleteTabs">
-                    <div class="category-tab active" onclick="filterAthletes('all')">Todos</div>
-                    <div class="category-tab" onclick="filterAthletes('sub13')">Sub 13</div>
-                    <div class="category-tab" onclick="filterAthletes('sub15')">Sub 15</div>
-                    <div class="category-tab" onclick="filterAthletes('sub19')">Sub 19</div>
-                    <div class="category-tab" onclick="filterAthletes('adultoA')">Adulto A</div>
-                    <div class="category-tab" onclick="filterAthletes('adultoB')">Adulto B</div>
-                    <div class="category-tab" onclick="filterAthletes('veterano')">Veterano</div>
-                </div>
+                <h2>Resumo por Categoria</h2>
+                <div class="grid-3" style="margin-top: 20px;">
+                    <div class="info-card">
+                        <h4>🏓 Sub 13</h
