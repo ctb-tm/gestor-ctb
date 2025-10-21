@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CTB - Sistema de Gestão de Torneios</title>
+    <title>CTB - Sistema de Gestão de Torneios de Tênis de Mesa</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     <style>
@@ -30,7 +30,6 @@
             color: white;
             padding: 30px;
             text-align: center;
-            position: relative;
         }
 
         header img {
@@ -222,26 +221,21 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
-        .game-card h4 {
-            color: #667eea;
-            margin-bottom: 10px;
-        }
-
         .game-result {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
             margin: 10px 0;
             flex-wrap: wrap;
         }
 
         .game-result input {
-            width: 80px;
+            width: 60px;
             padding: 8px;
             border: 2px solid #ddd;
             border-radius: 5px;
             text-align: center;
-            font-size: 1.1em;
+            font-size: 1em;
         }
 
         .control-panel {
@@ -292,16 +286,10 @@
             border: 2px solid #eee;
             border-radius: 8px;
             margin-bottom: 10px;
-            transition: all 0.3s;
-        }
-
-        .ranking-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .ranking-position {
-            font-size: 2em;
+            font-size: 1.8em;
             font-weight: bold;
             color: #667eea;
             margin-right: 20px;
@@ -322,38 +310,6 @@
         .group-bracket h3 {
             color: #667eea;
             margin-bottom: 15px;
-            border-bottom: 2px solid #667eea;
-            padding-bottom: 10px;
-        }
-
-        .match-item {
-            background: white;
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 6px;
-            border: 1px solid #ddd;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .player-name {
-            font-weight: 600;
-            flex: 1;
-        }
-
-        .score-input {
-            width: 60px;
-            padding: 5px;
-            text-align: center;
-            border: 2px solid #ddd;
-            border-radius: 4px;
-            margin: 0 5px;
-        }
-
-        .winner {
-            background: #d4edda;
-            border-color: #28a745;
         }
 
         .info-card {
@@ -362,11 +318,6 @@
             border-radius: 8px;
             border-left: 4px solid #667eea;
             margin-bottom: 15px;
-        }
-
-        .info-card h4 {
-            color: #667eea;
-            margin-bottom: 8px;
         }
 
         .bracket-stage {
@@ -381,26 +332,35 @@
             color: #667eea;
             margin-bottom: 15px;
             text-align: center;
-            font-size: 1.5em;
         }
+
+        .match-item {
+            background: white;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+
+        .winner { background: #d4edda; border-color: #28a745; }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <img src="ctb.png" alt="CTB Logo" onerror="this.style.display='none'" id="logo">
+            <img src="ctb.png" alt="CTB Logo" onerror="this.style.display='none'">
             <h1>CTB - Clube dos Tenistas da Bahia</h1>
             <p>Sistema de Gestão de Torneios de Tênis de Mesa</p>
         </header>
 
         <nav>
-            <button onclick="showPage('home')" class="nav-btn active">🏠 Início</button>
-            <button onclick="showPage('cadastro')" class="nav-btn">📝 Cadastro</button>
-            <button onclick="showPage('grupos')" class="nav-btn">👥 Grupos</button>
-            <button onclick="showPage('jogos')" class="nav-btn">🏓 Jogos</button>
-            <button onclick="showPage('eliminatorias')" class="nav-btn">🏆 Eliminatórias</button>
-            <button onclick="showPage('ranking')" class="nav-btn">📊 Ranking</button>
-            <button onclick="showPage('relatorios')" class="nav-btn">📄 Relatórios</button>
+            <button onclick="showPage('home')" class="nav-btn active" data-page="home">🏠 Início</button>
+            <button onclick="showPage('cadastro')" class="nav-btn" data-page="cadastro">📝 Cadastro</button>
+            <button onclick="showPage('grupos')" class="nav-btn" data-page="grupos">👥 Grupos</button>
+            <button onclick="showPage('jogos')" class="nav-btn" data-page="jogos">🏓 Jogos</button>
+            <button onclick="showPage('eliminatorias')" class="nav-btn" data-page="eliminatorias">🏆 Eliminatórias</button>
+            <button onclick="showPage('ranking')" class="nav-btn" data-page="ranking">📊 Ranking</button>
+            <button onclick="showPage('relatorios')" class="nav-btn" data-page="relatorios">📄 Relatórios</button>
         </nav>
 
         <div class="content">
@@ -419,18 +379,28 @@
                 </div>
 
                 <div class="alert alert-info">
-                    <strong>Instruções:</strong>
+                    <strong>📋 Instruções de Uso:</strong>
                     <ol style="margin-top: 10px; margin-left: 20px;">
-                        <li>Cadastre os atletas com nome e ranking inicial</li>
-                        <li>Clique em "Iniciar Torneio"</li>
-                        <li>Gere os grupos usando Snake System (baseado no ranking)</li>
-                        <li>Registre os resultados dos jogos</li>
-                        <li>Avance automaticamente para as eliminatórias</li>
-                        <li>Visualize o ranking final e exporte relatórios</li>
+                        <li>Cadastre os atletas com <strong>nome e ranking inicial</strong></li>
+                        <li>Clique em <strong>"Iniciar Torneio"</strong> para ativar o sistema</li>
+                        <li>Vá para "Grupos" e clique em <strong>"Gerar Grupos"</strong> (Snake System baseado no ranking)</li>
+                        <li>Em "Jogos", registre os <strong>resultados das partidas</strong></li>
+                        <li>Sistema calcula automaticamente a <strong>classificação e pontuação por fase</strong></li>
+                        <li>Avance para as <strong>Eliminatórias</strong> (oitavas, quartas, semifinais, final)</li>
+                        <li>Visualize o <strong>Ranking Final</strong> com pontuação total</li>
+                        <li>Exporte <strong>Relatórios em PDF</strong> de todas as fases</li>
                     </ol>
                 </div>
 
                 <h2>Resumo por Categoria</h2>
                 <div class="grid-3" style="margin-top: 20px;">
                     <div class="info-card">
-                        <h4>🏓 Sub 13</h
+                        <h4>🏓 Sub 13</h4>
+                        <p id="count-sub13">Atletas: 0</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>🏓 Sub 15</h4>
+                        <p id="count-sub15">Atletas: 0</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>
