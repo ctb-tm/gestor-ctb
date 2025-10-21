@@ -7,7 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     <style>
-        /* (Todo o CSS anterior) */
+        /* (Todo o seu CSS anterior permanece o mesmo) */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
         .container { max-width: 1400px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
@@ -31,6 +31,7 @@
         .btn-danger { background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%); }
         .btn-warning { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
         .btn-info { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .btn-pdf { padding: 8px 15px; font-size: 0.9em; margin-left: 10px; background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%); }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden; }
         table thead { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
         table th, table td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
@@ -54,58 +55,43 @@
         .group-player-list li { font-size: 1.1em; padding: 8px 10px; background: #fff; border-radius: 5px; margin-bottom: 8px; border: 1px solid #eee; }
         .group-player-list li span { font-weight: 600; color: #333; }
         .group-player-list li small { font-weight: 400; color: #777; }
-        
-        /* CSS dos Cards de Jogo */
         .game-card { background: white; border: 2px solid #eee; border-radius: 8px; padding: 15px; margin-bottom: 15px; transition: opacity 0.3s; }
         .game-card.done { opacity: 0.7; background: #f9f9f9; }
         .game-card h4 { color: #667eea; margin-bottom: 10px; }
         .player-row { display: flex; align-items: center; gap: 10px; padding: 10px; background: #f8f9ff; border-radius: 5px; margin: 5px 0; }
         .player-name { flex: 1; font-weight: 600; }
-        .player-name.winner { color: #11998e; }
+        .player-name.winner { color: #11998e; font-weight: bold; }
         .player-name.tbd { font-style: italic; color: #777; }
-        .wo-label { font-size: 0.9em; color: #777; }
-        
-        /* NOVO: CSS para Placares por Set */
-        .set-scores { display: flex; gap: 10px; margin-top: 10px; padding: 10px; background: #f8f9ff; border-radius: 5px; }
+        .wo-label { font-size: 0.9em; color: #777; margin-left: auto; }
+        .set-scores { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; padding: 10px; background: #f8f9ff; border-radius: 5px; justify-content: center; }
         .set-box { display: flex; flex-direction: column; align-items: center; }
         .set-box label { font-size: 0.8em; color: #555; margin-bottom: 5px; }
-        .set-input { width: 45px; padding: 5px; text-align: center; border: 1px solid #ddd; border-radius: 4px; }
+        .set-input { width: 45px; padding: 5px; text-align: center; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 3px; }
         .set-input:disabled { background: #eee; }
-        
-        /* CSS Tabela de Classificação (Standings) */
-        .standings-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden; font-size: 0.9em; }
+        .standings-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden; font-size: 0.85em; }
         .standings-table thead { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; }
-        .standings-table th, .standings-table td { padding: 8px; text-align: left; border-bottom: 1px solid #eee; text-align: center; }
+        .standings-table th, .standings-table td { padding: 6px 8px; text-align: center; border-bottom: 1px solid #eee; }
         .standings-table th:nth-child(2), .standings-table td:nth-child(2) { text-align: left; }
         .standings-table tbody tr:hover { background: #f8f9ff; }
         .standings-table tbody tr.qualified { background: #e6ffed; }
-        
-        /* CSS do Bracket de Eliminatórias */
         .knockout-bracket { display: flex; overflow-x: auto; padding: 20px; background: #f8f9ff; border-radius: 10px; }
-        .round { display: flex; flex-direction: column; justify-content: space-around; min-width: 300px; margin-right: 30px; } /* Aumentei o min-width */
+        .round { display: flex; flex-direction: column; justify-content: space-around; min-width: 320px; margin-right: 30px; }
         .round-title { font-size: 1.5em; color: #667eea; text-align: center; margin-bottom: 20px; }
         .knockout-match { margin-bottom: 20px; }
-
-        /* Tabela de Ranking Final */
-        .ranking-table { width: 100%; }
-        .ranking-table tbody tr:nth-child(1) { background: #ffd700; }
+        .ranking-table { width: 100%; font-size: 0.9em; }
+        .ranking-table th { padding: 10px; }
+        .ranking-table tbody tr:nth-child(1) { background: #ffd700; font-weight: bold; }
         .ranking-table tbody tr:nth-child(2) { background: #e5e5e5; }
-        .ranking-table tbody tr:nth-child(3),
-        .ranking-table tbody tr:nth-child(4) { background: #ffebd2; }
-        
-        @media (max-width: 768px) {
-            nav { flex-direction: column; }
-            .standings-table { font-size: 0.7em; }
-            .set-scores { flex-wrap: wrap; }
-            .set-input { width: 40px; }
-        }
+        .ranking-table tbody tr:nth-child(3), .ranking-table tbody tr:nth-child(4) { background: #ffebd2; }
+        .game-card-actions { text-align: right; margin-top: 10px; }
+        @media (max-width: 768px) { nav { flex-direction: column; } .standings-table { font-size: 0.7em; } .set-scores { flex-wrap: wrap; } .set-input { width: 40px; } }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <img src="ctb.png" alt="CTB Logo" onerror="this.src='https://via.placeholder.com/150x100?text=CTB+Logo'; this.onerror=null;">
-            <h1>CTB - Sistema de Gestão de Torneios</h1>
+            <h1>CTB - Clube dos Tenistas da Bahia</h1>
             <p>Sistema de Gestão de Torneios de Tênis de Mesa</p>
         </header>
 
@@ -136,10 +122,13 @@
                         <li>Vá para <strong>📝 Cadastro</strong> e adicione os atletas. (Mínimo 3 por categoria).</li>
                         <li>Volte aqui e clique em <strong>▶ Iniciar Torneio</strong>.</li>
                         <li>Vá para <strong>👥 Grupos</strong>, selecione a categoria e gere os grupos.</li>
-                        <li>Vá para <strong>🏓 Jogos Grupo</strong>, registe os placares (set a set) e clique em "Finalizar Grupos".</li>
-                        <li>O sistema criará o mata-mata em <strong>🏆 Eliminatórias</strong>.</li>
-                        <li>Registe os resultados das eliminatórias.</li>
-                        <li>Veja o resultado final em <strong>📊 Ranking</strong>.</li>
+                        <li>Vá para <strong>🏓 Jogos Grupo</strong>, registe os placares (set a set). Pode gerar a súmula PDF de cada jogo após salvar.</li>
+                        <li>Clique em <strong>🏆 Finalizar Grupos e Gerar Eliminatórias</strong>.</li>
+                        <li>Vá para <strong>🏆 Eliminatórias</strong> e registe os resultados (set a set). Pode gerar a súmula PDF.</li>
+                        <li>O sistema avança os vencedores automaticamente.</li>
+                        <li>Quando a final terminar, o ranking será calculado.</li>
+                        <li>Veja o resultado final em <strong>📊 Ranking</strong> (com pontuação acumulada).</li>
+                        <li>Use a aba <strong>📄 Relatórios</strong> para exportar listas e resultados consolidados.</li>
                     </ol>
                 </div>
                 <h2>Categorias Cadastradas</h2>
@@ -192,80 +181,61 @@
             
             <div id="jogos" class="page">
                 <h2>Resultados dos Jogos (Fase de Grupos)</h2>
-                <div class="alert alert-info">Selecione a categoria para ver os jogos e registar os placares. A classificação é atualizada automaticamente.</div>
-
+                <div class="alert alert-info">Selecione a categoria para ver os jogos e registar os placares set a set. A classificação é atualizada automaticamente.</div>
                 <div class="form-group" style="max-width: 500px;">
                     <label>Selecione a Categoria:</label>
-                    <select id="games-category-select" onchange="renderGroupMatchesAndStandings()">
-                        <option value="">-- Nenhum grupo gerado --</option>
-                    </select>
+                    <select id="games-category-select" onchange="renderGroupMatchesAndStandings()"><option value="">-- Nenhum grupo gerado --</option></select>
                 </div>
-                
                 <button class="btn btn-success" onclick="finalizeGroupsAndGenerateKnockout()">🏆 Finalizar Grupos e Gerar Eliminatórias</button>
-                
                 <hr style="margin: 30px 0;">
-                
                 <h3>Classificação dos Grupos</h3>
-                <div id="games-standings-area" class="group-container">
-                    </div>
-                
+                <div id="games-standings-area" class="group-container"></div>
                 <hr style="margin: 30px 0;">
-                
                 <h3>Jogos</h3>
-                <div id="games-display-area">
-                    </div>
+                <div id="games-display-area"></div>
             </div>
 
             <div id="eliminatorias" class="page">
                 <h2>Fase Eliminatória (Mata-Mata)</h2>
-                
                 <div class="form-group" style="max-width: 500px;">
                     <label>Selecione a Categoria:</label>
-                    <select id="knockout-category-select" onchange="renderKnockoutBracket()">
-                        <option value="">-- Nenhuma eliminatória gerada --</option>
-                    </select>
+                    <select id="knockout-category-select" onchange="renderKnockoutBracket()"><option value="">-- Nenhuma eliminatória gerada --</option></select>
                 </div>
-                
                 <hr style="margin: 30px 0;">
-
                 <div id="knockout-info-area"></div>
-                
-                <div class="knockout-bracket" id="knockout-display-area">
-                    </div>
+                <div class="knockout-bracket" id="knockout-display-area"></div>
             </div>
 
             <div id="ranking" class="page">
                 <h2>Ranking Final</h2>
-                
                 <div class="form-group" style="max-width: 500px;">
                     <label>Selecione a Categoria:</label>
-                    <select id="ranking-category-select" onchange="renderRanking()">
-                        <option value="">-- Nenhum torneio finalizado --</option>
-                    </select>
+                    <select id="ranking-category-select" onchange="renderRanking()"><option value="">-- Nenhum torneio finalizado --</option></select>
                 </div>
-
                 <hr style="margin: 30px 0;">
-                
-                <div id="ranking-display-area">
-                    </div>
+                <div id="ranking-display-area"></div>
             </div>
 
             <div id="relatorios" class="page">
                 <h2>Relatórios</h2>
-                <div class="alert alert-info">Exporte os dados do torneio em formato PDF.</div>
+                <div class="alert alert-info">Exporte os dados do torneio em formato PDF. Os PDFs de Súmula são gerados individualmente nos cards de jogo (após salvar o resultado).</div>
+                
+                <h4>Listas e Estruturas</h4>
                 <button class="btn btn-info" onclick="generateAthleteReport()">📄 Exportar Lista de Atletas (PDF)</button>
-                <button class="btn btn-info" onclick="generateResultsReport()">📋 Exportar Resultados dos Grupos (PDF)</button>
-            </div>
+                <button class="btn btn-info" onclick="generateGroupsReport()">👥 Exportar Grupos (PDF)</button>
+                
+                <h4>Resultados</h4>
+                 <button class="btn btn-info" onclick="generateGroupMatchesReport()">🏓 Exportar Jogos dos Grupos (PDF)</button>
+                 <button class="btn btn-info" onclick="generateKnockoutReport()">🏆 Exportar Jogos Eliminatórios (PDF)</button>
+                 <button class="btn btn-info" onclick="generateResultsReport()">📋 Exportar Classificação dos Grupos (PDF)</button>
+                 </div>
 
         </div> </div> <script>
         
         // -----------------------------------------------------------------
         // PASSO 1: "BANCO DE DADOS" E VARIÁVEIS GLOBAIS
         // -----------------------------------------------------------------
-        
-        let athletes = [];
-        let tournamentActive = false;
-        let tournamentData = {};
+        let athletes = []; let tournamentActive = false; let tournamentData = {};
         const knockoutPairings = {
             '2_groups': [ { p1_source: '1A', p2_source: '2B' }, { p1_source: '1B', p2_source: '2A' } ],
             '4_groups': [ { p1_source: '1A', p2_source: '2D' }, { p1_source: '1C', p2_source: '2B' }, { p1_source: '1B', p2_source: '2C' }, { p1_source: '1D', p2_source: '2A' } ],
@@ -275,26 +245,23 @@
             ]
         };
         const rankingPointsConfig = {
-            '12': { "Campeão": 265, "Vice-Campeão": 260, "Semifinal": 250, "Quartas": 235, "Classificação": 215 },
-            '16': { "Campeão": 265, "Vice-Campeão": 260, "Semifinal": 250, "Quartas": 235, "Oitavas": 215, "Classificação": 190 },
-            '24': { "Campeão": 265, "Vice-Campeão": 260, "Semifinal": 250, "Quartas": 235, "Oitavas": 215, "Classificação": 190 }
+            '12': { "Campeão": 265, "Vice-Campeão": 260, "Semifinal": 250, "Quartas": 235, "Classificação": 215, "Fase de Grupos": 190 },
+            '16': { "Campeão": 265, "Vice-Campeão": 260, "Semifinal": 250, "Quartas": 235, "Oitavas": 215, "Classificação": 190, "Fase de Grupos": 190 },
+            '24': { "Campeão": 265, "Vice-Campeão": 260, "Semifinal": 250, "Quartas": 235, "Oitavas": 215, "Classificação": 190, "Fase de Grupos": 190 }
         };
+
+        // =========================================================================
+        // !! IMPORTANTE !! Substitua a string abaixo pela Base64 da sua imagem ctb.png
+        // Pode usar um conversor online como: https://www.base64-image.de/
+        // O código atual contém uma imagem placeholder minúscula.
+        // =========================================================================
+        const ctbLogoBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='; // <-- COLOQUE A SUA BASE64 AQUI!
+
 
         // -----------------------------------------------------------------
         // PASSO 2: FUNÇÃO DE NAVEGAÇÃO
         // -----------------------------------------------------------------
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            document.getElementById(pageId)?.classList.add('active');
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.getAttribute('onclick') === `showPage('${pageId}')`) btn.classList.add('active');
-            });
-            if (pageId === 'grupos') populateGroupCategorySelector();
-            else if (pageId === 'jogos') { populateGamesCategorySelector(); renderGroupMatchesAndStandings(); }
-            else if (pageId === 'eliminatorias') { populateKnockoutCategorySelector(); renderKnockoutBracket(); }
-            else if (pageId === 'ranking') { populateRankingCategorySelector(); renderRanking(); }
-        }
+        function showPage(pageId){document.querySelectorAll('.page').forEach(page=>page.classList.remove('active'));document.getElementById(pageId)?.classList.add('active');document.querySelectorAll('.nav-btn').forEach(btn=>{btn.classList.remove('active');if(btn.getAttribute('onclick')===`showPage('${pageId}')`)btn.classList.add('active');});if(pageId==='grupos')populateGroupCategorySelector();else if(pageId==='jogos'){populateGamesCategorySelector();renderGroupMatchesAndStandings();}else if(pageId==='eliminatorias'){populateKnockoutCategorySelector();renderKnockoutBracket();}else if(pageId==='ranking'){populateRankingCategorySelector();renderRanking();}}
 
         // -----------------------------------------------------------------
         // PASSO 3: FUNÇÕES DA PÁGINA "CADASTRO" (Compactado)
@@ -320,396 +287,25 @@
         function renderGroups(groups,displayArea){if(!groups||groups.length===0)return;groups.forEach((group,index)=>{if(group.length===0)return;const groupLetter=(groups.length>1)?String.fromCharCode(65+index):"Único";const playersHtml=group.map(player=>`<li><span>${player.name}</span> <small>(Rank: ${player.ranking})</small></li>`).join('');const groupCardHtml=`<div class="group-bracket"><h3>Grupo ${groupLetter}</h3><ul class="group-player-list">${playersHtml}</ul></div>`;displayArea.innerHTML+=groupCardHtml;});}
         
         // -----------------------------------------------------------------
-        // PASSO 6: (ATUALIZADO) FUNÇÕES DA PÁGINA "JOGOS GRUPO"
+        // PASSO 6: FUNÇÕES DA PÁGINA "JOGOS GRUPO"
         // -----------------------------------------------------------------
         function populateGamesCategorySelector(){const select=document.getElementById('games-category-select');const currentSelection=select.value;select.innerHTML='';const categoriesWithGroups=Object.keys(tournamentData).filter(key=>tournamentData[key].groups&&tournamentData[key].groups.length>0);if(categoriesWithGroups.length===0){select.innerHTML='<option value="">-- Nenhum grupo gerado --</option>';return;}select.innerHTML='<option value="">-- Selecione a categoria --</option>';categoriesWithGroups.forEach(category=>{const categoryName=getCategoryDisplayName(category);const isSelected=category===currentSelection?'selected':'';select.innerHTML+=`<option value="${category}" ${isSelected}>${categoryName}</option>`;});}
-        function generateGroupMatches(groups){let allMatches=[];groups.forEach((group,index)=>{const groupName=(groups.length>1)?String.fromCharCode(65+index):"Único";const sortedPlayers=[...group].sort((a,b)=>a.ranking-b.ranking);const n=sortedPlayers.length;const p=sortedPlayers;let groupMatches=[];const createMatch=(p1,p2)=>(p1&&p2?{id:`m_${p1.id}_${p2.id}`,group:groupName,p1:p1,p2:p2,sets:[],finalScore1:null,finalScore2:null,pointsPro1:0,pointsPro2:0,points1:0,points2:0,wo:false,done:false}:null);if(n===3){groupMatches.push(createMatch(p[0],p[2]));groupMatches.push(createMatch(p[1],p[2]));groupMatches.push(createMatch(p[0],p[1]));}else if(n===4){groupMatches.push(createMatch(p[0],p[3]));groupMatches.push(createMatch(p[1],p[2]));groupMatches.push(createMatch(p[0],p[2]));groupMatches.push(createMatch(p[1],p[3]));groupMatches.push(createMatch(p[0],p[1]));groupMatches.push(createMatch(p[2],p[3]));}else if(n>1){for(let i=0;i<n;i++){for(let j=i+1;j<n;j++){groupMatches.push(createMatch(p[i],p[j]));}}}allMatches=allMatches.concat(groupMatches.filter(m=>m!==null));});return allMatches;}
-        function renderGroupMatchesAndStandings(){const selectedCategory=document.getElementById('games-category-select').value;const gamesArea=document.getElementById('games-display-area');const standingsArea=document.getElementById('games-standings-area');gamesArea.innerHTML='';standingsArea.innerHTML='';if(!selectedCategory||!tournamentData[selectedCategory]){standingsArea.innerHTML='<div class="alert alert-warning">Selecione uma categoria para ver os jogos e a classificação.</div>';return;}renderGroupStandings(selectedCategory,standingsArea);renderGroupMatches(selectedCategory,gamesArea);}
-        
-        /**
-         * ATUALIZADO: Salva o resultado (por set)
-         */
-        function saveMatchResult(category, matchId) {
-            const match = tournamentData[category].matches.find(m => m.id === matchId);
-            if (!match) return;
-
-            // Valida os sets usando a nova função auxiliar
-            const result = validateAndProcessSets(match.id);
-            if (!result.valid) {
-                alert(`Erro: ${result.error}`);
-                return;
-            }
-
-            // Aplicar regras de pontos do jogo (5/4/3...)
-            let pts1 = 0, pts2 = 0;
-            if (result.finalScore1 === 3) {
-                if (result.finalScore2 === 0) { pts1 = 5; pts2 = 0; }
-                else if (result.finalScore2 === 1) { pts1 = 4; pts2 = 1; }
-                else if (result.finalScore2 === 2) { pts1 = 3; pts2 = 2; }
-            } else { // s2 === 3
-                if (result.finalScore1 === 0) { pts1 = 0; pts2 = 5; }
-                else if (result.finalScore1 === 1) { pts1 = 1; pts2 = 4; }
-                else if (result.finalScore1 === 2) { pts1 = 2; pts2 = 3; }
-            }
-            
-            // Salvar todos os dados no "banco de dados"
-            match.sets = result.sets;
-            match.finalScore1 = result.finalScore1;
-            match.finalScore2 = result.finalScore2;
-            match.pointsPro1 = result.pointsPro1;
-            match.pointsPro2 = result.pointsPro2;
-            match.points1 = pts1; match.points2 = pts2;
-            match.wo = result.wo;
-            match.done = true;
-            
-            // Atualizar a UI do Card
-            const card = document.getElementById(`game_card_${match.id}`);
-            card.classList.add('done');
-            card.querySelector('button').disabled = true;
-            card.querySelector('button').textContent = 'Salvo ✓';
-            for (let i = 1; i <= 5; i++) {
-                document.getElementById(`score_${match.id}_p1_s${i}`).disabled = true;
-                document.getElementById(`score_${match.id}_p2_s${i}`).disabled = true;
-            }
-            document.getElementById(`wo_${match.id}_p1`).disabled = true;
-            document.getElementById(`wo_${match.id}_p2`).disabled = true;
-            
-            // Recalcular e Renderizar Classificação
-            calculateGroupStandings(category);
-            renderGroupStandings(category, document.getElementById('games-standings-area'));
-        }
-
-        /**
-         * NOVO: Função complexa para validar placares por set
-         */
-        function validateAndProcessSets(matchId) {
-            const wo1 = document.getElementById(`wo_${matchId}_p1`).checked;
-            const wo2 = document.getElementById(`wo_${matchId}_p2`).checked;
-            
-            let sets = [], finalScore1 = 0, finalScore2 = 0, pointsPro1 = 0, pointsPro2 = 0;
-
-            if (wo1 && wo2) return { valid: false, error: "Ambos os jogadores não podem ser W.O." };
-            
-            // Lógica de W.O.
-            if (wo1) {
-                return { valid: true, sets: [{s1:0,s2:11},{s1:0,s2:11},{s1:0,s2:11}], finalScore1: 0, finalScore2: 3, pointsPro1: 0, pointsPro2: 33, wo: true };
-            }
-            if (wo2) {
-                return { valid: true, sets: [{s1:11,s2:0},{s1:11,s2:0},{s1:11,s2:0}], finalScore1: 3, finalScore2: 0, pointsPro1: 33, pointsPro2: 0, wo: true };
-            }
-
-            // Lógica de placar normal
-            for (let i = 1; i <= 5; i++) {
-                const s1_input = document.getElementById(`score_${matchId}_p1_s${i}`);
-                const s2_input = document.getElementById(`score_${matchId}_p2_s${i}`);
-                
-                if (!s1_input || !s2_input) break; // Segurança
-                
-                const s1_val = s1_input.value;
-                const s2_val = s2_input.value;
-
-                // Se ambos os campos estão vazios, o jogo acabou no set anterior
-                if (s1_val === '' && s2_val === '') {
-                    if (finalScore1 < 3 && finalScore2 < 3) {
-                        return { valid: false, error: `Set ${i} incompleto. Jogo deve ter um vencedor (3 sets).` };
-                    }
-                    break; // Jogo finalizado
-                }
-                
-                // Se só um está preenchido
-                if (s1_val === '' || s2_val === '') {
-                    return { valid: false, error: `Placar do Set ${i} está incompleto.` };
-                }
-
-                const s1 = parseInt(s1_val);
-                const s2 = parseInt(s2_val);
-
-                if (isNaN(s1) || isNaN(s2) || s1 < 0 || s2 < 0) {
-                    return { valid: false, error: `Placar do Set ${i} contém valores inválidos.` };
-                }
-                
-                // Validação de placar (Regra de Tênis de Mesa)
-                if (s1 < 11 && s2 < 11) {
-                    return { valid: false, error: `Set ${i} inválido (${s1}x${s2}). Um jogador deve ter no mínimo 11 pontos.` };
-                }
-                if (s1 >= 10 && s2 >= 10 && Math.abs(s1 - s2) !== 2) {
-                    return { valid: false, error: `Set ${i} inválido (${s1}x${s2}). Acima de 10, a diferença deve ser de 2 pontos.` };
-                }
-                if ((s1 < 10 || s2 < 10) && Math.abs(s1 - s2) < 2) {
-                    return { valid: false, error: `Set ${i} inválido (${s1}x${s2}). Abaixo de 11, o vencedor deve ter 11 pontos.` };
-                }
-                 if ((s1 > 11 && s2 < 10) || (s2 > 11 && s1 < 10)) {
-                    if(Math.abs(s1 - s2) < 2) return { valid: false, error: `Set ${i} inválido (${s1}x${s2}).` };
-                }
-
-
-                sets.push({ s1: s1, s2: s2 });
-                pointsPro1 += s1;
-                pointsPro2 += s2;
-                (s1 > s2) ? finalScore1++ : finalScore2++;
-
-                // Se o jogo acabou (3x0, 3x1, 3x2), para a contagem
-                if (finalScore1 === 3 || finalScore2 === 3) {
-                    // Verifica se o próximo set está preenchido (o que seria um erro)
-                    if(i < 5) {
-                        const next_s1 = document.getElementById(`score_${matchId}_p1_s${i+1}`).value;
-                        const next_s2 = document.getElementById(`score_${matchId}_p2_s${i+1}`).value;
-                        if(next_s1 !== '' || next_s2 !== '') {
-                            return { valid: false, error: `O jogo terminou ${finalScore1}x${finalScore2} no Set ${i}, mas o Set ${i+1} está preenchido.` };
-                        }
-                    }
-                    break; // Sai do loop
-                }
-            }
-            
-            if (finalScore1 < 3 && finalScore2 < 3) {
-                return { valid: false, error: "Resultado final inválido. Ninguém venceu 3 sets." };
-            }
-            
-            return { valid: true, sets, finalScore1, finalScore2, pointsPro1, pointsPro2, wo: false };
-        }
-
-        /**
-         * ATUALIZADO: Calcula a classificação (com Pontos Pró/Contra)
-         */
-        function calculateGroupStandings(category) {
-            const data = tournamentData[category];
-            if (!data) return;
-            const standings = {};
-            
-            data.groups.forEach(group => {
-                group.forEach(player => {
-                    standings[player.id] = {
-                        id: player.id, name: player.name, group: null,
-                        Pts: 0, J: 0, V: 0, D: 0, SP: 0, SC: 0, PP: 0, PC: 0, ID: 0
-                    };
-                });
-            });
-
-            const completedMatches = data.matches.filter(m => m.done);
-            completedMatches.forEach(match => {
-                const p1_stats = standings[match.p1.id];
-                const p2_stats = standings[match.p2.id];
-                p1_stats.group = match.group; p2_stats.group = match.group;
-                p1_stats.J++; p2_stats.J++;
-                p1_stats.Pts += match.points1; p2_stats.Pts += match.points2;
-                p1_stats.SP += match.finalScore1; p1_stats.SC += match.finalScore2;
-                p2_stats.SP += match.finalScore2; p2_stats.SC += match.finalScore1;
-                p1_stats.PP += match.pointsPro1; p1_stats.PC += match.pointsPro2; // NOVO
-                p2_stats.PP += match.pointsPro2; p2_stats.PC += match.pointsPro1; // NOVO
-                (match.finalScore1 > match.finalScore2) ? (p1_stats.V++, p2_stats.D++) : (p1_stats.D++, p2_stats.V++);
-            });
-            
-            const groupedStandings = {};
-            Object.values(standings).forEach(playerStats => {
-                if (!playerStats.group) return; 
-                if (!groupedStandings[playerStats.group]) groupedStandings[playerStats.group] = [];
-                groupedStandings[playerStats.group].push(playerStats);
-            });
-
-            for (const groupName in groupedStandings) {
-                groupedStandings[groupName].sort((a, b) => {
-                    if (a.Pts > b.Pts) return -1; if (a.Pts < b.Pts) return 1;
-                    
-                    const tiedPlayers = groupedStandings[groupName].filter(p => p.Pts === a.Pts);
-                    const tiedPlayerIds = tiedPlayers.map(p => p.id);
-                    const tiedMatches = completedMatches.filter(m => tiedPlayerIds.includes(m.p1.id) && tiedPlayerIds.includes(m.p2.id));
-
-                    if (tiedPlayers.length === 2) {
-                        const directMatch = tiedMatches[0];
-                        if (directMatch) {
-                            if (directMatch.p1.id === a.id && directMatch.finalScore1 > directMatch.finalScore2) return -1;
-                            if (directMatch.p2.id === a.id && directMatch.finalScore2 > directMatch.finalScore1) return -1;
-                            return 1;
-                        }
-                    } else if (tiedPlayers.length > 2) {
-                        const miniLeague = {};
-                        tiedPlayerIds.forEach(id => { miniLeague[id] = { V: 0, J: 0 }; });
-                        tiedMatches.forEach(m => {
-                            miniLeague[m.p1.id].J++; miniLeague[m.p2.id].J++;
-                            (m.finalScore1 > m.finalScore2) ? miniLeague[m.p1.id].V++ : miniLeague[m.p2.id].V++;
-                        });
-                        const id_a = (miniLeague[a.id].J === 0) ? 0 : (miniLeague[a.id].V / miniLeague[a.id].J);
-                        const id_b = (miniLeague[b.id].J === 0) ? 0 : (miniLeague[b.id].V / miniLeague[b.id].J);
-                        a.ID = id_a.toFixed(2); b.ID = id_b.toFixed(2);
-                        if (id_a > id_b) return -1; if (id_a < id_b) return 1;
-                    }
-
-                    const saldoSetsA = a.SP - a.SC; const saldoSetsB = b.SP - b.SC;
-                    if (saldoSetsA > saldoSetsB) return -1; if (saldoSetsA < saldoSetsB) return 1;
-                    
-                    // NOVO: Desempate por Saldo de Pontos (PP - PC)
-                    const saldoPontosA = a.PP - a.PC; const saldoPontosB = b.PP - b.PC;
-                    if (saldoPontosA > saldoPontosB) return -1; if (saldoPontosA < saldoPontosB) return 1;
-
-                    // NOVO: Desempate por Pontos Pró (PP)
-                    if (a.PP > b.PP) return -1; if (a.PP < b.PP) return 1;
-                    
-                    const p1_rank = athletes.find(p => p.id === a.id).ranking;
-                    const p2_rank = athletes.find(p => p.id === b.id).ranking;
-                    return p1_rank - p2_rank;
-                });
-            }
-            data.standings = groupedStandings;
-        }
-
-        /**
-         * ATUALIZADO: Renderiza as tabelas (com PP/PC)
-         */
-        function renderGroupStandings(category, standingsArea) {
-            standingsArea.innerHTML = '';
-            const data = tournamentData[category];
-            if (!data || !data.groups) return;
-            
-            if (!data.standings || Object.keys(data.standings).length === 0) {
-                data.groups.forEach((group, index) => {
-                    const groupName = (data.groups.length > 1) ? String.fromCharCode(65 + index) : "Único";
-                    standingsArea.innerHTML += createEmptyStandingsTable(groupName, group);
-                });
-                return;
-            }
-            
-            const sortedGroupNames = Object.keys(data.standings).sort();
-            sortedGroupNames.forEach(groupName => {
-                const table = document.createElement('table');
-                table.className = 'standings-table';
-                let tableHtml = `
-                    <thead>
-                        <tr><th colspan="11">Classificação - Grupo ${groupName}</th></tr>
-                        <tr><th>Pos</th><th>Nome</th><th>Pts</th><th>J</th><th>V</th><th>D</th><th>SP</th><th>SC</th><th>PP</th><th>PC</th><th>ID</th></tr>
-                    </thead>
-                    <tbody>
-                `;
-                data.standings[groupName].forEach((stats, index) => {
-                    const qualifiedClass = (index < 2 && data.elimination !== "Nenhum (Round Robin)") ? 'class="qualified"' : '';
-                    tableHtml += `
-                        <tr ${qualifiedClass}>
-                            <td>${index + 1}</td>
-                            <td style="text-align: left;">${stats.name}</td>
-                            <td>${stats.Pts}</td>
-                            <td>${stats.J}</td>
-                            <td>${stats.V}</td>
-                            <td>${stats.D}</td>
-                            <td>${stats.SP}</td>
-                            <td>${stats.SC}</td>
-                            <td>${stats.PP}</td>
-                            <td>${stats.PC}</td>
-                            <td>${stats.ID || 'N/A'}</td>
-                        </tr>
-                    `;
-                });
-                tableHtml += `</tbody>`;
-                table.innerHTML = tableHtml;
-                standingsArea.appendChild(table);
-            });
-        }
-        function createEmptyStandingsTable(groupName, groupPlayers) {
-             let tableHtml = `<table class="standings-table">
-                    <thead><tr><th colspan="11">Classificação - Grupo ${groupName}</th></tr>
-                        <tr><th>Pos</th><th>Nome</th><th>Pts</th><th>J</th><th>V</th><th>D</th><th>SP</th><th>SC</th><th>PP</th><th>PC</th><th>ID</th></tr></thead>
-                    <tbody>`;
-            groupPlayers.forEach((player, index) => {
-                tableHtml += `<tr><td>-</td><td style="text-align: left;">${player.name}</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>N/A</td></tr>`;
-            });
-            tableHtml += `</tbody></table>`;
-            return tableHtml;
-        }
-
-        /**
-         * ATUALIZADO: Renderiza os cards de jogo (com 5 inputs de set)
-         */
-        function renderGroupMatches(category, gamesArea) {
-            gamesArea.innerHTML = '';
-            if (!category || !tournamentData[category] || !tournamentData[category].matches) return;
-            const matches = tournamentData[category].matches;
-
-            matches.forEach((match, index) => {
-                const matchCard = document.createElement('div');
-                matchCard.className = 'game-card';
-                matchCard.id = `game_card_${match.id}`;
-                const isDone = match.done;
-                if(isDone) matchCard.classList.add('done');
-                
-                const wo1 = match.wo && match.finalScore2 === 3;
-                const wo2 = match.wo && match.finalScore1 === 3;
-                
-                let setsHtml = '';
-                for(let i = 1; i <= 5; i++) {
-                    const set = match.sets[i-1];
-                    const s1 = set ? set.s1 : '';
-                    const s2 = set ? set.s2 : '';
-                    setsHtml += `
-                        <div class="set-box">
-                            <label>Set ${i}</label>
-                            <input type="number" class="set-input" id="score_${match.id}_p1_s${i}" value="${s1}" ${isDone ? 'disabled' : ''}>
-                            <input type="number" class="set-input" id="score_${match.id}_p2_s${i}" value="${s2}" ${isDone ? 'disabled' : ''}>
-                        </div>
-                    `;
-                }
-
-                matchCard.innerHTML = `
-                    <h4>Jogo ${index + 1} (Grupo ${match.group})</h4>
-                    <div class="player-row">
-                        <span class="player-name">${match.p1.name}</span>
-                        <label class="wo-label"><input type="checkbox" id="wo_${match.id}_p1" onchange="toggleWO('${match.id}', 'p1', 5)" ${wo1 ? 'checked' : ''} ${isDone ? 'disabled' : ''}> W.O.</label>
-                    </div>
-                    <div class="player-row">
-                        <span class="player-name">${match.p2.name}</span>
-                        <label class="wo-label"><input type="checkbox" id="wo_${match.id}_p2" onchange="toggleWO('${match.id}', 'p2', 5)" ${wo2 ? 'checked' : ''} ${isDone ? 'disabled' : ''}> W.O.</label>
-                    </div>
-                    <div class="set-scores">
-                        ${setsHtml}
-                    </div>
-                    <div style="text-align: right; margin-top: 10px;">
-                        <button class="btn btn-success" style="padding: 8px 15px;" onclick="saveMatchResult('${category}', '${match.id}')" ${isDone ? 'disabled' : ''}>
-                            ${isDone ? 'Salvo ✓' : 'Salvar'}
-                        </button>
-                    </div>`;
-                gamesArea.appendChild(matchCard);
-            });
-        }
-        function toggleWO(matchId, player, numSets) {
-            const wo1_cb = document.getElementById(`wo_${matchId}_p1`);
-            const wo2_cb = document.getElementById(`wo_${matchId}_p2`);
-            
-            const p1_sets = [];
-            const p2_sets = [];
-            for(let i=1; i<=numSets; i++) {
-                p1_sets.push(document.getElementById(`score_${matchId}_p1_s${i}`));
-                p2_sets.push(document.getElementById(`score_${matchId}_p2_s${i}`));
-            }
-
-            const fillSets = (val1, val2) => {
-                p1_sets.forEach((input, i) => { 
-                    if(i < 3) input.value = val1; else input.value = '';
-                    input.disabled = (val1 !== null);
-                });
-                p2_sets.forEach((input, i) => {
-                    if(i < 3) input.value = val2; else input.value = '';
-                    input.disabled = (val2 !== null);
-                });
-            };
-
-            if (player === 'p1' && wo1_cb.checked) {
-                wo2_cb.checked = false;
-                fillSets(0, 11);
-            } else if (player === 'p2' && wo2_cb.checked) {
-                wo1_cb.checked = false;
-                fillSets(11, 0);
-            } else {
-                fillSets(null, null);
-            }
-        }
+        function generateGroupMatches(groups){let allMatches=[];groups.forEach((group,index)=>{const groupName=(groups.length>1)?String.fromCharCode(65+index):"Único";const sortedPlayers=[...group].sort((a,b)=>a.ranking-b.ranking);const n=sortedPlayers.length;const p=sortedPlayers;let groupMatches=[];const createMatch=(p1,p2)=>(p1&&p2?{id:`m_${p1.id}_${p2.id}`,type:'group',group:groupName,p1:p1,p2:p2,sets:[],finalScore1:null,finalScore2:null,pointsPro1:0,pointsPro2:0,points1:0,points2:0,wo:false,done:false}:null);if(n===3){groupMatches.push(createMatch(p[0],p[2]));groupMatches.push(createMatch(p[1],p[2]));groupMatches.push(createMatch(p[0],p[1]));}else if(n===4){groupMatches.push(createMatch(p[0],p[3]));groupMatches.push(createMatch(p[1],p[2]));groupMatches.push(createMatch(p[0],p[2]));groupMatches.push(createMatch(p[1],p[3]));groupMatches.push(createMatch(p[0],p[1]));groupMatches.push(createMatch(p[2],p[3]));}else if(n>1){for(let i=0;i<n;i++){for(let j=i+1;j<n;j++){groupMatches.push(createMatch(p[i],p[j]));}}}allMatches=allMatches.concat(groupMatches.filter(m=>m!==null));});return allMatches;}
+        function renderGroupMatchesAndStandings(){const selectedCategory=document.getElementById('games-category-select').value;const gamesArea=document.getElementById('games-display-area');const standingsArea=document.getElementById('games-standings-area');gamesArea.innerHTML='';standingsArea.innerHTML='';if(!selectedCategory||!tournamentData[selectedCategory]){standingsArea.innerHTML='<div class="alert alert-warning">Selecione uma categoria para ver os jogos e a classificação.</div>';return;}calculateGroupStandings(selectedCategory);renderGroupStandings(selectedCategory,standingsArea);renderGroupMatches(selectedCategory,gamesArea);}
+        function saveMatchResult(category,matchId){const match=tournamentData[category].matches.find(m=>m.id===matchId);if(!match)return;const result=validateAndProcessSets(match.id);if(!result.valid){alert(`Erro: ${result.error}`);return;}let pts1=0,pts2=0;if(result.finalScore1===3){if(result.finalScore2===0){pts1=5;pts2=0;}else if(result.finalScore2===1){pts1=4;pts2=1;}else if(result.finalScore2===2){pts1=3;pts2=2;}}else if(result.finalScore2===3){if(result.finalScore1===0){pts1=0;pts2=5;}else if(result.finalScore1===1){pts1=1;pts2=4;}else if(result.finalScore1===2){pts1=2;pts2=3;}}match.sets=result.sets;match.finalScore1=result.finalScore1;match.finalScore2=result.finalScore2;match.pointsPro1=result.pointsPro1;match.pointsPro2=result.pointsPro2;match.points1=pts1;match.points2=pts2;match.wo=result.wo;match.done=true;const card=document.getElementById(`game_card_${match.id}`);card.classList.add('done');card.querySelector('.btn-success').disabled=true;card.querySelector('.btn-success').textContent='Salvo ✓';card.querySelector('.btn-pdf').style.display='inline-block';for(let i=1;i<=5;i++){document.getElementById(`score_${match.id}_p1_s${i}`).disabled=true;document.getElementById(`score_${match.id}_p2_s${i}`).disabled=true;}document.getElementById(`wo_${match.id}_p1`).disabled=true;document.getElementById(`wo_${match.id}_p2`).disabled=true;calculateGroupStandings(category);renderGroupStandings(category,document.getElementById('games-standings-area'));}
+        function validateAndProcessSets(matchId){const wo1=document.getElementById(`wo_${matchId}_p1`).checked;const wo2=document.getElementById(`wo_${matchId}_p2`).checked;let sets=[],finalScore1=0,finalScore2=0,pointsPro1=0,pointsPro2=0;if(wo1&&wo2)return{valid:false,error:"Ambos os jogadores não podem ser W.O."};if(wo1)return{valid:true,sets:[{s1:0,s2:11},{s1:0,s2:11},{s1:0,s2:11}],finalScore1:0,finalScore2:3,pointsPro1:0,pointsPro2:33,wo:true};if(wo2)return{valid:true,sets:[{s1:11,s2:0},{s1:11,s2:0},{s1:11,s2:0}],finalScore1:3,finalScore2:0,pointsPro1:33,pointsPro2:0,wo:true};for(let i=1;i<=5;i++){const s1_input=document.getElementById(`score_${matchId}_p1_s${i}`);const s2_input=document.getElementById(`score_${matchId}_p2_s${i}`);if(!s1_input||!s2_input)break;const s1_val=s1_input.value;const s2_val=s2_input.value;if(s1_val===''&&s2_val===''){if(finalScore1<3&&finalScore2<3)return{valid:false,error:`Set ${i} incompleto. Jogo deve ter um vencedor (3 sets).`};break;}if(s1_val===''||s2_val==='')return{valid:false,error:`Placar do Set ${i} está incompleto.`};const s1=parseInt(s1_val);const s2=parseInt(s2_val);if(isNaN(s1)||isNaN(s2)||s1<0||s2<0)return{valid:false,error:`Placar do Set ${i} contém valores inválidos.`};const isP1Win=s1>s2;const winnerScore=isP1Win?s1:s2;const loserScore=isP1Win?s2:s1;if(winnerScore<11)return{valid:false,error:`Set ${i} inválido (${s1}x${s2}). Vencedor deve ter no mínimo 11 pontos.`};if(winnerScore===11&&loserScore>9)return{valid:false,error:`Set ${i} inválido (${s1}x${s2}). Se 11, placar do perdedor não pode ser 10.`};if(winnerScore>11&&(winnerScore-loserScore)!==2)return{valid:false,error:`Set ${i} inválido (${s1}x${s2}). Acima de 10, a diferença deve ser de 2 pontos.`};sets.push({s1:s1,s2:s2});pointsPro1+=s1;pointsPro2+=s2;(s1>s2)?finalScore1++:finalScore2++;if(finalScore1===3||finalScore2===3){if(i<5){const next_s1=document.getElementById(`score_${matchId}_p1_s${i+1}`).value;const next_s2=document.getElementById(`score_${matchId}_p2_s${i+1}`).value;if(next_s1!==''||next_s2!=='')return{valid:false,error:`O jogo terminou ${finalScore1}x${finalScore2} no Set ${i}, mas o Set ${i+1} está preenchido.`};}break;}}if(finalScore1<3&&finalScore2<3)return{valid:false,error:"Resultado final inválido. Ninguém venceu 3 sets."};return{valid:true,sets,finalScore1,finalScore2,pointsPro1,pointsPro2,wo:false};}
+        function calculateGroupStandings(category){const data=tournamentData[category];if(!data||!data.matches)return;const standings={};data.groups.flat().forEach(player=>{standings[player.id]={id:player.id,name:player.name,group:null,Pts:0,J:0,V:0,D:0,SP:0,SC:0,PP:0,PC:0,ID:0};});const completedMatches=data.matches.filter(m=>m.done);completedMatches.forEach(match=>{if(!standings[match.p1.id]||!standings[match.p2.id])return;const p1_stats=standings[match.p1.id];const p2_stats=standings[match.p2.id];p1_stats.group=match.group;p2_stats.group=match.group;p1_stats.J++;p2_stats.J++;p1_stats.Pts+=match.points1;p2_stats.Pts+=match.points2;p1_stats.SP+=match.finalScore1;p1_stats.SC+=match.finalScore2;p2_stats.SP+=match.finalScore2;p2_stats.SC+=match.finalScore1;p1_stats.PP+=match.pointsPro1;p1_stats.PC+=match.pointsPro2;p2_stats.PP+=match.pointsPro2;p2_stats.PC+=match.pointsPro1;(match.finalScore1>match.finalScore2)?(p1_stats.V++,p2_stats.D++):(p1_stats.D++,p2_stats.V++);});const groupedStandings={};Object.values(standings).forEach(playerStats=>{if(playerStats.group===null)return;if(!groupedStandings[playerStats.group])groupedStandings[playerStats.group]=[];groupedStandings[playerStats.group].push(playerStats);});for(const groupName in groupedStandings){groupedStandings[groupName].sort((a,b)=>{if(a.Pts>b.Pts)return-1;if(a.Pts<b.Pts)return 1;const tiedPlayers=groupedStandings[groupName].filter(p=>p.Pts===a.Pts);const tiedPlayerIds=tiedPlayers.map(p=>p.id);const tiedMatches=completedMatches.filter(m=>m.group===groupName&&tiedPlayerIds.includes(m.p1.id)&&tiedPlayerIds.includes(m.p2.id));if(tiedPlayers.length===2){const directMatch=tiedMatches.find(m=>(m.p1.id===a.id&&m.p2.id===b.id)||(m.p1.id===b.id&&m.p2.id===a.id));if(directMatch){if(directMatch.p1.id===a.id&&directMatch.finalScore1>directMatch.finalScore2)return-1;if(directMatch.p2.id===a.id&&directMatch.finalScore2>directMatch.finalScore1)return-1;return 1;}}else if(tiedPlayers.length>2){const miniLeague={};tiedPlayerIds.forEach(id=>{miniLeague[id]={V:0,J:0};});tiedMatches.forEach(m=>{miniLeague[m.p1.id].J++;miniLeague[m.p2.id].J++;(m.finalScore1>m.finalScore2)?miniLeague[m.p1.id].V++:miniLeague[m.p2.id].V++;});const id_a=(miniLeague[a.id].J===0)?0:(miniLeague[a.id].V/miniLeague[a.id].J);const id_b=(miniLeague[b.id].J===0)?0:(miniLeague[b.id].V/miniLeague[b.id].J);a.ID=id_a.toFixed(2);b.ID=id_b.toFixed(2);if(id_a>id_b)return-1;if(id_a<id_b)return 1;}const saldoSetsA=a.SP-a.SC;const saldoSetsB=b.SP-b.SC;if(saldoSetsA>saldoSetsB)return-1;if(saldoSetsA<saldoSetsB)return 1;const saldoPontosA=a.PP-a.PC;const saldoPontosB=b.PP-b.PC;if(saldoPontosA>saldoPontosB)return-1;if(saldoPontosA<saldoPontosB)return 1;if(a.PP>b.PP)return-1;if(a.PP<b.PP)return 1;const p1_rank=athletes.find(p=>p.id===a.id).ranking;const p2_rank=athletes.find(p=>p.id===b.id).ranking;return p1_rank-p2_rank;});}data.standings=groupedStandings;}
+        function renderGroupStandings(category,standingsArea){standingsArea.innerHTML='';const data=tournamentData[category];if(!data||!data.groups)return;if(!data.standings||Object.keys(data.standings).length===0){data.groups.forEach((group,index)=>{const groupName=(data.groups.length>1)?String.fromCharCode(65+index):"Único";standingsArea.innerHTML+=createEmptyStandingsTable(groupName,group);});return;}const sortedGroupNames=Object.keys(data.standings).sort();sortedGroupNames.forEach(groupName=>{const table=document.createElement('table');table.className='standings-table';let tableHtml=`<thead><tr><th colspan="11">Classificação - Grupo ${groupName}</th></tr><tr><th>Pos</th><th>Nome</th><th>Pts</th><th>J</th><th>V</th><th>D</th><th>SP</th><th>SC</th><th>PP</th><th>PC</th><th>ID</th></tr></thead><tbody>`;data.standings[groupName].forEach((stats,index)=>{const qualifiedClass=(index<2&&data.elimination!=="Nenhum (Round Robin)")?'class="qualified"':'';tableHtml+=`<tr ${qualifiedClass}><td>${index+1}</td><td style="text-align:left;">${stats.name}</td><td>${stats.Pts}</td><td>${stats.J}</td><td>${stats.V}</td><td>${stats.D}</td><td>${stats.SP}</td><td>${stats.SC}</td><td>${stats.PP}</td><td>${stats.PC}</td><td>${stats.ID||'N/A'}</td></tr>`;});tableHtml+=`</tbody>`;table.innerHTML=tableHtml;standingsArea.appendChild(table);});}
+        function createEmptyStandingsTable(groupName,groupPlayers){let tableHtml=`<table class="standings-table"><thead><tr><th colspan="11">Classificação - Grupo ${groupName}</th></tr><tr><th>Pos</th><th>Nome</th><th>Pts</th><th>J</th><th>V</th><th>D</th><th>SP</th><th>SC</th><th>PP</th><th>PC</th><th>ID</th></tr></thead><tbody>`;groupPlayers.forEach((player,index)=>{tableHtml+=`<tr><td>-</td><td style="text-align:left;">${player.name}</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>N/A</td></tr>`;});tableHtml+=`</tbody></table>`;return tableHtml;}
+        function renderGroupMatches(category,gamesArea){gamesArea.innerHTML='';if(!category||!tournamentData[category]||!tournamentData[category].matches)return;const matches=tournamentData[category].matches;matches.forEach((match,index)=>{const matchCard=document.createElement('div');matchCard.className='game-card';matchCard.id=`game_card_${match.id}`;const isDone=match.done;if(isDone)matchCard.classList.add('done');const wo1=match.wo&&match.finalScore2===3;const wo2=match.wo&&match.finalScore1===3;let setsHtml='';for(let i=1;i<=5;i++){const set=match.sets[i-1];const s1=set?set.s1:'';const s2=set?set.s2:'';setsHtml+=`<div class="set-box"><label>Set ${i}</label><input type="number" class="set-input" id="score_${match.id}_p1_s${i}" value="${s1}" ${isDone?'disabled':''} min="0"><input type="number" class="set-input" id="score_${match.id}_p2_s${i}" value="${s2}" ${isDone?'disabled':''} min="0"></div>`;}matchCard.innerHTML=`<h4>Jogo ${index+1} (Grupo ${match.group})</h4><div class="player-row"><span class="player-name">${match.p1.name}</span><label class="wo-label"><input type="checkbox" id="wo_${match.id}_p1" onchange="toggleWO('${match.id}','p1',5)" ${wo1?'checked':''} ${isDone?'disabled':''}> W.O.</label></div><div class="player-row"><span class="player-name">${match.p2.name}</span><label class="wo-label"><input type="checkbox" id="wo_${match.id}_p2" onchange="toggleWO('${match.id}','p2',5)" ${wo2?'checked':''} ${isDone?'disabled':''}> W.O.</label></div><div class="set-scores">${setsHtml}</div><div class="game-card-actions"><button class="btn btn-success" style="padding:8px 15px;" onclick="saveMatchResult('${category}','${match.id}')" ${isDone?'disabled':''}>${isDone?'Salvo ✓':'Salvar'}</button><button class="btn btn-info btn-pdf" onclick="generateScoresheet('${category}', '${match.id}', 'group')" ${!isDone?'style="display:none;"':''}>📄 Súmula</button></div>`;gamesArea.appendChild(matchCard);});}
+        function toggleWO(matchId,player,numSets){const wo1_cb=document.getElementById(`wo_${matchId}_p1`);const wo2_cb=document.getElementById(`wo_${matchId}_p2`);const p1_sets=[];const p2_sets=[];for(let i=1;i<=numSets;i++){p1_sets.push(document.getElementById(`score_${matchId}_p1_s${i}`));p2_sets.push(document.getElementById(`score_${matchId}_p2_s${i}`));}const fillSets=(val1,val2)=>{p1_sets.forEach((input,i)=>{if(input){if(i<3)input.value=val1;else input.value='';input.disabled=(val1!==null);}});p2_sets.forEach((input,i)=>{if(input){if(i<3)input.value=val2;else input.value='';input.disabled=(val2!==null);}});};if(player==='p1'&&wo1_cb.checked){wo2_cb.checked=false;fillSets(0,11);}else if(player==='p2'&&wo2_cb.checked){wo1_cb.checked=false;fillSets(11,0);}else{fillSets(null,null);}}
 
         // -----------------------------------------------------------------
-        // PASSO 7: (ATUALIZADO) FUNÇÕES DA PÁGINA "ELIMINATÓRIAS"
+        // PASSO 7: FUNÇÕES DA PÁGINA "ELIMINATÓRIAS"
         // -----------------------------------------------------------------
         function populateKnockoutCategorySelector(){const select=document.getElementById('knockout-category-select');const currentSelection=select.value;select.innerHTML='';const categoriesWithKO=Object.keys(tournamentData).filter(key=>tournamentData[key].knockoutRounds&&Object.keys(tournamentData[key].knockoutRounds).length>0);if(categoriesWithKO.length===0){select.innerHTML='<option value="">-- Nenhuma eliminatória gerada --</option>';return;}select.innerHTML='<option value="">-- Selecione a categoria --</option>';categoriesWithKO.forEach(category=>{const categoryName=getCategoryDisplayName(category);const isSelected=category===currentSelection?'selected':'';select.innerHTML+=`<option value="${category}" ${isSelected}>${categoryName}</option>`;});}
-        function finalizeGroupsAndGenerateKnockout(){const category=document.getElementById('games-category-select').value;if(!category){alert("Selecione uma categoria primeiro.");return;}const data=tournamentData[category];const allMatchesDone=data.matches.every(m=>m.done);if(!allMatchesDone){alert("Erro: Nem todos os jogos do grupo foram salvos. Conclua todos os jogos antes de gerar as eliminatórias.");return;}if(data.elimination==="Nenhum (Round Robin)"){alert("Categoria de Grupo Único finalizada! Verifique o Ranking.");generateRanking(category);showPage('ranking');return;}const qualifiedPlayers={};const standings=data.standings;for(const groupName in standings){qualifiedPlayers[`1${groupName}`]=standings[groupName][0];qualifiedPlayers[`2${groupName}`]=standings[groupName][1];}const pairingRules=knockoutPairings[data.knockoutKey];const roundName=data.elimination;data.knockoutRounds={};data.knockoutRounds[roundName]=[];let matchCount=1;pairingRules.forEach(rule=>{const p1=qualifiedPlayers[rule.p1_source];const p2=qualifiedPlayers[rule.p2_source];const match={id:`ko_${category}_${roundName}_${matchCount++}`,round:roundName,p1:p1?p1:{id:0,name:`Classificado ${rule.p1_source}`},p2:p2?p2:{id:0,name:`Classificado ${rule.p2_source}`},sets:[],finalScore1:null,finalScore2:null,pointsPro1:0,pointsPro2:0,done:false,winner:null,loser:null};data.knockoutRounds[roundName].push(match);});alert(`Eliminatórias (${roundName}) geradas com sucesso para ${getCategoryDisplayName(category)}!`);populateKnockoutCategorySelector();document.getElementById('knockout-category-select').value=category;renderKnockoutBracket();showPage('eliminatorias');}
+        function finalizeGroupsAndGenerateKnockout(){const category=document.getElementById('games-category-select').value;if(!category){alert("Selecione uma categoria primeiro.");return;}const data=tournamentData[category];const allMatchesDone=data.matches.every(m=>m.done);if(!allMatchesDone){alert("Erro: Nem todos os jogos do grupo foram salvos. Conclua todos os jogos antes de gerar as eliminatórias.");return;}if(data.elimination==="Nenhum (Round Robin)"){alert("Categoria de Grupo Único finalizada! Verifique o Ranking.");generateRanking(category);populateRankingCategorySelector();document.getElementById('ranking-category-select').value = category; renderRanking();showPage('ranking');return;}const qualifiedPlayers={};const standings=data.standings;for(const groupName in standings){qualifiedPlayers[`1${groupName}`]=standings[groupName][0];if(standings[groupName][1])qualifiedPlayers[`2${groupName}`]=standings[groupName][1];else qualifiedPlayers[`2${groupName}`]=null;}const pairingRules=knockoutPairings[data.knockoutKey];const roundName=data.elimination;data.knockoutRounds={};data.knockoutRounds[roundName]=[];let matchCount=1;pairingRules.forEach(rule=>{const p1=qualifiedPlayers[rule.p1_source];const p2=qualifiedPlayers[rule.p2_source];const match={id:`ko_${category}_${roundName}_${matchCount++}`,type:'knockout',round:roundName,p1:p1?p1:{id:0,name:`Classificado ${rule.p1_source}`},p2:p2?p2:{id:0,name:`Classificado ${rule.p2_source}`},sets:[],finalScore1:null,finalScore2:null,pointsPro1:0,pointsPro2:0,points1:0,points2:0,wo:false,done:false,winner:null,loser:null};data.knockoutRounds[roundName].push(match);});alert(`Eliminatórias (${roundName}) geradas com sucesso para ${getCategoryDisplayName(category)}!`);populateKnockoutCategorySelector();document.getElementById('knockout-category-select').value=category;renderKnockoutBracket();showPage('eliminatorias');}
         
-        /**
-         * ATUALIZADO: Renderiza o bracket (com 5 inputs de set)
-         */
         function renderKnockoutBracket() {
             const category = document.getElementById('knockout-category-select').value;
             const displayArea = document.getElementById('knockout-display-area');
@@ -720,71 +316,42 @@
                 return;
             }
             const rounds = tournamentData[category].knockoutRounds;
-            for(const roundName in rounds) {
-                const roundDiv = document.createElement('div');
-                roundDiv.className = 'round';
-                roundDiv.innerHTML = `<h3 class="round-title">${roundName}</h3>`;
-                rounds[roundName].forEach(match => {
-                    const matchCard = createKnockoutMatchCard(category, match);
-                    roundDiv.appendChild(matchCard);
-                });
-                displayArea.appendChild(roundDiv);
+            const roundOrder = ["Oitavas de Final", "Quartas de Final", "Semifinal", "Final"]; 
+            for(const roundName of roundOrder) { // Renderiza na ordem correta
+                if(rounds[roundName]) {
+                    const roundDiv = document.createElement('div');
+                    roundDiv.className = 'round';
+                    roundDiv.innerHTML = `<h3 class="round-title">${roundName}</h3>`;
+                    rounds[roundName].forEach(match => {
+                        const matchCard = createKnockoutMatchCard(category, match);
+                        roundDiv.appendChild(matchCard);
+                    });
+                    displayArea.appendChild(roundDiv);
+                }
             }
         }
         
-        /**
-         * ATUALIZADO: Cria card de jogo (com 5 inputs de set)
-         */
         function createKnockoutMatchCard(category, match) {
             const matchCard = document.createElement('div');
             matchCard.className = 'game-card knockout-match';
             matchCard.id = `game_card_${match.id}`;
-            
             const isDone = match.done;
             if(isDone) matchCard.classList.add('done');
-            
-            const p1_class = (isDone && match.winner.id === match.p1.id) ? 'winner' : (match.p1.id === 0 ? 'tbd' : '');
-            const p2_class = (isDone && match.winner.id === match.p2.id) ? 'winner' : (match.p2.id === 0 ? 'tbd' : '');
+            const p1_class = (isDone && match.winner && match.winner.id === match.p1.id) ? 'winner' : (match.p1.id === 0 ? 'tbd' : '');
+            const p2_class = (isDone && match.winner && match.winner.id === match.p2.id) ? 'winner' : (match.p2.id === 0 ? 'tbd' : '');
             const canSave = match.p1.id !== 0 && match.p2.id !== 0;
-            
+            const wo1 = match.wo && match.finalScore2 === 3;
+            const wo2 = match.wo && match.finalScore1 === 3;
             let setsHtml = '';
             for(let i = 1; i <= 5; i++) {
-                const set = match.sets[i-1];
-                const s1 = set ? set.s1 : '';
-                const s2 = set ? set.s2 : '';
-                setsHtml += `
-                    <div class="set-box">
-                        <label>Set ${i}</label>
-                        <input type="number" class="set-input" id="score_${match.id}_p1_s${i}" value="${s1}" ${isDone || !canSave ? 'disabled' : ''}>
-                        <input type="number" class="set-input" id="score_${match.id}_p2_s${i}" value="${s2}" ${isDone || !canSave ? 'disabled' : ''}>
-                    </div>
-                `;
+                const set = match.sets[i-1]; const s1 = set ? set.s1 : ''; const s2 = set ? set.s2 : '';
+                setsHtml += `<div class="set-box"><label>Set ${i}</label><input type="number" class="set-input" id="score_${match.id}_p1_s${i}" value="${s1}" ${isDone || !canSave ? 'disabled' : ''} min="0"><input type="number" class="set-input" id="score_${match.id}_p2_s${i}" value="${s2}" ${isDone || !canSave ? 'disabled' : ''} min="0"></div>`;
             }
-
-            matchCard.innerHTML = `
-                <h4>${match.round}</h4>
-                <div class="player-row">
-                    <span class="player-name ${p1_class}">${match.p1.name}</span>
-                    <label class="wo-label"><input type="checkbox" id="wo_${match.id}_p1" onchange="toggleWO('${match.id}', 'p1', 5)" ${isDone || !canSave ? 'disabled' : ''}> W.O.</label>
-                </div>
-                <div class="player-row">
-                    <span class="player-name ${p2_class}">${match.p2.name}</span>
-                    <label class="wo-label"><input type="checkbox" id="wo_${match.id}_p2" onchange="toggleWO('${match.id}', 'p2', 5)" ${isDone || !canSave ? 'disabled' : ''}> W.O.</label>
-                </div>
-                <div class="set-scores">
-                    ${setsHtml}
-                </div>
-                <div style="text-align: right; margin-top: 10px;">
-                    <button class="btn btn-success" style="padding: 8px 15px;" onclick="saveKnockoutMatch('${category}', '${match.id}')" ${isDone || !canSave ? 'disabled' : ''}>
-                        ${isDone ? 'Salvo ✓' : 'Salvar'}
-                    </button>
-                </div>`;
+            // Adicionado botão de súmula
+            matchCard.innerHTML = `<h4>${match.round}</h4><div class="player-row"><span class="player-name ${p1_class}">${match.p1.name}</span><label class="wo-label"><input type="checkbox" id="wo_${match.id}_p1" onchange="toggleWO('${match.id}','p1',5)" ${wo1?'checked':''} ${isDone || !canSave ? 'disabled' : ''}> W.O.</label></div><div class="player-row"><span class="player-name ${p2_class}">${match.p2.name}</span><label class="wo-label"><input type="checkbox" id="wo_${match.id}_p2" onchange="toggleWO('${match.id}','p2',5)" ${wo2?'checked':''} ${isDone || !canSave ? 'disabled' : ''}> W.O.</label></div><div class="set-scores">${setsHtml}</div><div class="game-card-actions"><button class="btn btn-success" style="padding:8px 15px;" onclick="saveKnockoutMatch('${category}','${match.id}')" ${isDone || !canSave ? 'disabled' : ''}>${isDone?'Salvo ✓':'Salvar'}</button><button class="btn btn-info btn-pdf" onclick="generateScoresheet('${category}', '${match.id}', 'knockout')" ${!isDone ? 'style="display:none;"' : ''}>📄 Súmula</button></div>`;
             return matchCard;
         }
         
-        /**
-         * ATUALIZADO: Salva jogo de KO (usando placar por set)
-         */
         function saveKnockoutMatch(category, matchId) {
             const data = tournamentData[category];
             let match = null, currentRoundName = null;
@@ -794,101 +361,206 @@
             }
             if (!match) return;
             
-            // Valida os sets
             const result = validateAndProcessSets(match.id);
-            if (!result.valid) {
-                alert(`Erro: ${result.error}`);
-                return;
-            }
+            if (!result.valid) { alert(`Erro: ${result.error}`); return; }
             
-            // Salva os dados
+            let pts1 = 0, pts2 = 0;
+            if (result.finalScore1 === 3) {
+                if (result.finalScore2 === 0) { pts1 = 5; pts2 = 0; }
+                else if (result.finalScore2 === 1) { pts1 = 4; pts2 = 1; }
+                else if (result.finalScore2 === 2) { pts1 = 3; pts2 = 2; }
+            } else if (result.finalScore2 === 3) {
+                if (result.finalScore1 === 0) { pts1 = 0; pts2 = 5; }
+                else if (result.finalScore1 === 1) { pts1 = 1; pts2 = 4; }
+                else if (result.finalScore1 === 2) { pts1 = 2; pts2 = 3; }
+            }
+
             match.sets = result.sets;
-            match.finalScore1 = result.finalScore1;
-            match.finalScore2 = result.finalScore2;
-            match.pointsPro1 = result.pointsPro1;
-            match.pointsPro2 = result.pointsPro2;
-            match.wo = result.wo;
-            match.done = true;
+            match.finalScore1 = result.finalScore1; match.finalScore2 = result.finalScore2;
+            match.pointsPro1 = result.pointsPro1; match.pointsPro2 = result.pointsPro2;
+            match.points1 = pts1; match.points2 = pts2; // Salva BÓNUS
+            match.wo = result.wo; match.done = true;
             match.winner = (match.finalScore1 > match.finalScore2) ? match.p1 : match.p2;
             match.loser = (match.finalScore1 > match.finalScore2) ? match.p2 : match.p1;
             
-            // Avança o vencedor
             advanceWinner(category, match.winner, currentRoundName, match.id);
-            
-            // Redesenha o bracket
-            renderKnockoutBracket();
+            renderKnockoutBracket(); // Atualiza a UI inteira
             
             if (currentRoundName === "Final") {
                 alert(`Torneio ${getCategoryDisplayName(category)} finalizado! Campeão: ${match.winner.name}`);
                 generateRanking(category);
                 populateRankingCategorySelector();
+                document.getElementById('ranking-category-select').value = category; 
+                renderRanking();
                 showPage('ranking');
             }
         }
-        function advanceWinner(category,winner,currentRoundName,sourceMatchId){const data=tournamentData[category];const roundOrder=["Oitavas de Final","Quartas de Final","Semifinal","Final"];const currentRoundIndex=roundOrder.indexOf(currentRoundName);if(currentRoundIndex===-1||currentRoundIndex===roundOrder.length-1){return;}const nextRoundName=roundOrder[currentRoundIndex+1];if(!data.knockoutRounds[nextRoundName]){data.knockoutRounds[nextRoundName]=[];}const currentRoundMatches=data.knockoutRounds[currentRoundName];const matchIndex=currentRoundMatches.findIndex(m=>m.id===sourceMatchId);const nextMatchIndex=Math.floor(matchIndex/2);const positionInNextMatch=(matchIndex%2===0)?'p1':'p2';if(!data.knockoutRounds[nextRoundName][nextMatchIndex]){data.knockoutRounds[nextRoundName][nextMatchIndex]={id:`ko_${category}_${nextRoundName}_${nextMatchIndex}`,round:nextRoundName,p1:{id:0,name:`Vencedor Jogo ${matchIndex+1}`},p2:{id:0,name:`Vencedor Jogo ${matchIndex+2}`},sets:[],finalScore1:null,finalScore2:null,pointsPro1:0,pointsPro2:0,done:false,winner:null,loser:null};}data.knockoutRounds[nextRoundName][nextMatchIndex][positionInNextMatch]=winner;}
+        function advanceWinner(category, winner, currentRoundName, sourceMatchId) {
+            const data = tournamentData[category];
+            const roundOrder = ["Oitavas de Final", "Quartas de Final", "Semifinal", "Final"];
+            const currentRoundIndex = roundOrder.indexOf(currentRoundName);
+            if (currentRoundIndex === -1 || currentRoundIndex === roundOrder.length - 1) return; // É a final ou erro
+            const nextRoundName = roundOrder[currentRoundIndex + 1];
+            if (!data.knockoutRounds[nextRoundName]) data.knockoutRounds[nextRoundName] = [];
+            const currentRoundMatches = data.knockoutRounds[currentRoundName];
+            const matchIndex = currentRoundMatches.findIndex(m => m.id === sourceMatchId);
+            const nextMatchIndex = Math.floor(matchIndex / 2);
+            const positionInNextMatch = (matchIndex % 2 === 0) ? 'p1' : 'p2';
+
+            // Cria o slot da próxima partida se não existir
+            if (!data.knockoutRounds[nextRoundName][nextMatchIndex]) {
+                 const nextMatchCount = data.knockoutRounds[nextRoundName].filter(Boolean).length + 1; // Garante ID sequencial mesmo com "buracos"
+                 // Determina nomes dos placeholders com base nos jogos anteriores
+                 const prevMatch1Index = nextMatchIndex * 2;
+                 const prevMatch2Index = nextMatchIndex * 2 + 1;
+                 const prevMatch1Id = currentRoundMatches[prevMatch1Index]?.id || `jogo_${prevMatch1Index+1}`;
+                 const prevMatch2Id = currentRoundMatches[prevMatch2Index]?.id || `jogo_${prevMatch2Index+1}`;
+
+                data.knockoutRounds[nextRoundName][nextMatchIndex] = {
+                    id: `ko_${category}_${nextRoundName}_${nextMatchCount}`,
+                    type: 'knockout', round: nextRoundName,
+                    p1: { id: 0, name: `Vencedor (${currentRoundName} J${prevMatch1Index + 1})` },
+                    p2: { id: 0, name: `Vencedor (${currentRoundName} J${prevMatch2Index + 1})` },
+                    sets: [], finalScore1: null, finalScore2: null, pointsPro1: 0, pointsPro2: 0, points1: 0, points2: 0,
+                    wo: false, done: false, winner: null, loser: null
+                };
+            }
+            data.knockoutRounds[nextRoundName][nextMatchIndex][positionInNextMatch] = winner;
+        }
 
         // -----------------------------------------------------------------
-        // PASSO 8: (ATUALIZADO) FUNÇÕES DA PÁGINA "RANKING"
+        // PASSO 8: FUNÇÕES DA PÁGINA "RANKING" (Com pontuação acumulada)
         // -----------------------------------------------------------------
         function populateRankingCategorySelector(){const select=document.getElementById('ranking-category-select');const currentSelection=select.value;select.innerHTML='';const categoriesRanked=Object.keys(tournamentData).filter(key=>tournamentData[key].ranking);if(categoriesRanked.length===0){select.innerHTML='<option value="">-- Nenhum torneio finalizado --</option>';return;}select.innerHTML='<option value="">-- Selecione a categoria --</option>';categoriesRanked.forEach(category=>{const categoryName=getCategoryDisplayName(category);const isSelected=category===currentSelection?'selected':'';select.innerHTML+=`<option value="${category}" ${isSelected}>${categoryName}</option>`;});}
-        function generateRanking(category){const data=tournamentData[category];if(!data)return;const finalRanking=[];const n=data.numAthletes;let pointsTable;if(n<=12)pointsTable=rankingPointsConfig['12'];else if(n<=16)pointsTable=rankingPointsConfig['16'];else pointsTable=rankingPointsConfig['24'];if(data.knockoutRounds["Final"]){const final=data.knockoutRounds["Final"][0];finalRanking.push({pos:1,name:final.winner.name,points:pointsTable["Campeão"],stage:"Campeão",id:final.winner.id});finalRanking.push({pos:2,name:final.loser.name,points:pointsTable["Vice-Campeão"],stage:"Vice-Campeão",id:final.loser.id});}if(data.knockoutRounds["Semifinal"]){data.knockoutRounds["Semifinal"].forEach(match=>{finalRanking.push({pos:3,name:match.loser.name,points:pointsTable["Semifinal"],stage:"Semifinal",id:match.loser.id});});}if(data.knockoutRounds["Quartas de Final"]){data.knockoutRounds["Quartas de Final"].forEach(match=>{finalRanking.push({pos:5,name:match.loser.name,points:pointsTable["Quartas"],stage:"Quartas",id:match.loser.id});});}if(data.knockoutRounds["Oitavas de Final"]){data.knockoutRounds["Oitavas de Final"].forEach(match=>{finalRanking.push({pos:9,name:match.loser.name,points:pointsTable["Oitavas"],stage:"Oitavas",id:match.loser.id});});}if(data.standings){Object.values(data.standings).forEach(group=>{group.slice(2).forEach(player=>{finalRanking.push({pos:17,name:player.name,points:pointsTable["Classificação"],stage:"Fase de Grupos",id:player.id});});});}if(data.elimination==="Nenhum (Round Robin)"){const group=data.standings["Único"];group.forEach((player,index)=>{let points=0;if(index===0)points=pointsTable["Campeão"];else if(index===1)points=pointsTable["Vice-Campeão"];else points=pointsTable["Semifinal"];finalRanking.push({pos:index+1,name:player.name,points:points,stage:`Grupo (${index+1}º)`,id:player.id});});}finalRanking.sort((a,b)=>a.pos-b.pos);data.ranking=finalRanking;}
-        function renderRanking(){const category=document.getElementById('ranking-category-select').value;const displayArea=document.getElementById('ranking-display-area');displayArea.innerHTML='';if(!category||!tournamentData[category]||!tournamentData[category].ranking){displayArea.innerHTML='<div class="alert alert-warning">Nenhum ranking finalizado para esta categoria.</div>';return;}const ranking=tournamentData[category].ranking;let tableHtml=`<table class="standings-table ranking-table"><thead><tr><th colspan="4">Ranking Final - ${getCategoryDisplayName(category)}</th></tr><tr><th>Pos.</th><th>Atleta</th><th>Fase Atingida</th><th>Pontos</th></tr></thead><tbody>`;let currentPos=0;ranking.forEach(player=>{if(player.pos>currentPos)currentPos=player.pos;tableHtml+=`<tr><td>${currentPos}º</td><td style="text-align: left;">${player.name}</td><td>${player.stage}</td><td>${player.points}</td></tr>`;});tableHtml+=`</tbody></table>`;displayArea.innerHTML=tableHtml;}
+        function calculateTotalBonusPoints(athleteId,category){const data=tournamentData[category];let totalBonus=0;if(data.matches){data.matches.forEach(match=>{if(match.p1.id===athleteId)totalBonus+=match.points1;if(match.p2.id===athleteId)totalBonus+=match.points2;});}for(const roundName in data.knockoutRounds){data.knockoutRounds[roundName].forEach(match=>{if(!match.done)return;if(match.p1.id===athleteId)totalBonus+=match.points1;if(match.p2.id===athleteId)totalBonus+=match.points2;});}return totalBonus;}
+        function generateRanking(category){const data=tournamentData[category];if(!data)return;const finalRanking=[];const n=data.numAthletes;let pointsTable;if(n<=12)pointsTable=rankingPointsConfig['12'];else if(n<=16)pointsTable=rankingPointsConfig['16'];else pointsTable=rankingPointsConfig['24'];const finalMatch=data.knockoutRounds["Final"]?data.knockoutRounds["Final"][0]:null;if(finalMatch&&finalMatch.done){finalRanking.push({pos:1,id:finalMatch.winner.id,name:finalMatch.winner.name,stage:"Campeão"});finalRanking.push({pos:2,id:finalMatch.loser.id,name:finalMatch.loser.name,stage:"Vice-Campeão"});}if(data.knockoutRounds["Semifinal"]){data.knockoutRounds["Semifinal"].forEach(match=>{if(match.done&&match.loser&&match.loser.id !== 0)finalRanking.push({pos:3,id:match.loser.id,name:match.loser.name,stage:"Semifinal"});});}if(data.knockoutRounds["Quartas de Final"]){data.knockoutRounds["Quartas de Final"].forEach(match=>{if(match.done&&match.loser&&match.loser.id !== 0)finalRanking.push({pos:5,id:match.loser.id,name:match.loser.name,stage:"Quartas"});});}if(data.knockoutRounds["Oitavas de Final"]){data.knockoutRounds["Oitavas de Final"].forEach(match=>{if(match.done&&match.loser&&match.loser.id !== 0)finalRanking.push({pos:9,id:match.loser.id,name:match.loser.name,stage:"Oitavas"});});}const rankedIds=new Set(finalRanking.map(p=>p.id));if(data.standings){Object.values(data.standings).forEach(group=>{group.forEach((playerStats,idx)=>{if(!rankedIds.has(playerStats.id)){const stage=(idx<2&&data.elimination!=="Nenhum (Round Robin)")?(data.elimination||"Classificação"):"Fase de Grupos";const pointsKey=pointsTable[stage]?stage:"Classificação";const pos= (stage === "Fase de Grupos") ? 17 : (data.knockoutRounds["Oitavas de Final"] ? 9 : (data.knockoutRounds["Quartas de Final"] ? 5 : (data.knockoutRounds["Semifinal"] ? 3 : 1))); finalRanking.push({pos:pos,id:playerStats.id,name:playerStats.name,stage:stage});}});});}if(data.elimination==="Nenhum (Round Robin)"){const group=data.standings["Único"];group.forEach((player,index)=>{if(!rankedIds.has(player.id)){let stage="";if(index===0)stage="Campeão";else if(index===1)stage="Vice-Campeão";else stage="Semifinal";finalRanking.push({pos:index+1,id:player.id,name:player.name,stage:stage});}});finalRanking.sort((a,b)=>a.pos-b.pos);}const rankingComPontos=finalRanking.map(player=>{const basePoints=pointsTable[player.stage]||pointsTable["Classificação"]||0;const bonusPoints=calculateTotalBonusPoints(player.id,category);return{...player,basePoints:basePoints,bonusPoints:bonusPoints,totalPoints:basePoints+bonusPoints};});rankingComPontos.sort((a,b)=>a.pos-b.pos);data.ranking=rankingComPontos;}
+        function renderRanking(){const category=document.getElementById('ranking-category-select').value;const displayArea=document.getElementById('ranking-display-area');displayArea.innerHTML='';if(!category||!tournamentData[category]||!tournamentData[category].ranking){displayArea.innerHTML='<div class="alert alert-warning">Nenhum ranking finalizado para esta categoria.</div>';return;}const ranking=tournamentData[category].ranking;let tableHtml=`<table class="standings-table ranking-table"><thead><tr><th colspan="6">Ranking Final - ${getCategoryDisplayName(category)}</th></tr><tr><th>Pos.</th><th>Atleta</th><th>Fase</th><th>P. Base</th><th>P. Bónus</th><th>P. Total</th></tr></thead><tbody>`;let currentPos=0;let displayPos = 0; ranking.forEach((player,index)=>{if(player.pos!==currentPos){currentPos=player.pos; displayPos = index + 1;}tableHtml+=`<tr><td>${displayPos}º</td><td style="text-align:left;">${player.name}</td><td>${player.stage}</td><td>${player.basePoints}</td><td>${player.bonusPoints}</td><td><strong>${player.totalPoints}</strong></td></tr>`;});tableHtml+=`</tbody></table>`;displayArea.innerHTML=tableHtml;}
 
         // -----------------------------------------------------------------
         // PASSO 9: (ATUALIZADO) FUNÇÕES DA PÁGINA "RELATÓRIOS"
         // -----------------------------------------------------------------
-        function generateAthleteReport(){if(typeof window.jspdf==='undefined'){alert('Erro: A biblioteca jsPDF não carregou.');return;}const{jsPDF}=window.jspdf;if(athletes.length===0){alert('Não há atletas cadastrados para gerar o relatório.');return;}const doc=new jsPDF();doc.text("Relatório de Atletas Cadastrados - CTB",10,10);const tableData=athletes.map(a=>[a.name,getCategoryDisplayName(a.category),a.ranking]);doc.autoTable({head:[['Nome','Categoria','Ranking']],body:tableData,startY:20});doc.save('relatorio_atletas_ctb.pdf');}
+        function generateAthleteReport(){if(typeof window.jspdf==='undefined'){alert('Erro: A biblioteca jsPDF não carregou.');return;}const{jsPDF}=window.jspdf;if(athletes.length===0){alert('Não há atletas cadastrados para gerar o relatório.');return;}const doc=new jsPDF();doc.text("Relatório de Atletas Cadastrados - CTB",14,15);const tableData=athletes.map(a=>[a.name,getCategoryDisplayName(a.category),a.ranking]);doc.autoTable({head:[['Nome','Categoria','Ranking']],body:tableData,startY:20});doc.save('relatorio_atletas_ctb.pdf');}
+        function generateResultsReport(){if(typeof window.jspdf==='undefined'){alert('Erro: A biblioteca jsPDF não carregou.');return;}const{jsPDF}=window.jspdf;const doc=new jsPDF();doc.text("Relatório de Classificação - Fase de Grupos",14,15);let yPos=20;const categories=Object.keys(tournamentData);if(categories.length===0){alert("Nenhum grupo foi gerado ainda.");return;}for(const category of categories){const data=tournamentData[category];if(!data.standings)continue;if(yPos>250){doc.addPage();yPos=15;}doc.setFont(undefined,'bold');doc.text(getCategoryDisplayName(category),14,yPos);yPos+=10;const sortedGroupNames=Object.keys(data.standings).sort();for(const groupName of sortedGroupNames){if(yPos>250){doc.addPage();yPos=15;}doc.setFont(undefined,'normal');doc.text(`Grupo ${groupName}`,14,yPos);const tableHead=[['Pos','Nome','Pts','J','V','D','SP','SC','PP','PC','ID']];const tableBody=data.standings[groupName].map((stats,index)=>[index+1,stats.name,stats.Pts,stats.J,stats.V,stats.D,stats.SP,stats.SC,stats.PP,stats.PC,stats.ID||'-']);doc.autoTable({head:tableHead,body:tableBody,startY:yPos+2,theme:'grid',headStyles:{fillColor:[42,82,152]},styles:{fontSize:8, cellPadding: 1},columnStyles:{1:{cellWidth:35}}});yPos=doc.lastAutoTable.finalY+10;}}doc.save('relatorio_classificacao_grupos_ctb.pdf');}
+        function generateGroupsReport(){if(typeof window.jspdf==='undefined'){alert('Erro: A biblioteca jsPDF não carregou.');return;}const{jsPDF}=window.jspdf;const doc=new jsPDF();doc.text("Relatório de Formação de Grupos",14,15);let yPos=20;const categories=Object.keys(tournamentData).filter(c=>tournamentData[c].groups);if(categories.length===0){alert("Nenhum grupo foi gerado ainda.");return;}for(const category of categories){const data=tournamentData[category];if(yPos>260){doc.addPage();yPos=15;}doc.setFont(undefined,'bold');doc.text(getCategoryDisplayName(category),14,yPos);yPos+=8;data.groups.forEach((group,index)=>{const groupName=(data.groups.length>1)?String.fromCharCode(65+index):"Único";doc.setFont(undefined,'normal');const tableHead=[[`Grupo ${groupName}`,'Ranking']];const tableBody=group.map(player=>[player.name,player.ranking]);if(yPos+tableBody.length*5 > 280){doc.addPage(); yPos = 15;} doc.autoTable({head:tableHead,body:tableBody,startY:yPos,theme:'striped',headStyles:{fillColor:[42,82,152]}});yPos=doc.lastAutoTable.finalY+8;});yPos+=5;}doc.save('relatorio_grupos_ctb.pdf');}
+        function generateGroupMatchesReport(){if(typeof window.jspdf==='undefined'){alert('Erro: A biblioteca jsPDF não carregou.');return;}const{jsPDF}=window.jspdf;const doc=new jsPDF();doc.text("Relatório de Jogos - Fase de Grupos",14,15);let yPos=20;const categories=Object.keys(tournamentData).filter(c=>tournamentData[c].matches);if(categories.length===0){alert("Nenhum jogo de grupo foi gerado ainda.");return;}for(const category of categories){const data=tournamentData[category];if(yPos>260){doc.addPage();yPos=15;}doc.setFont(undefined,'bold');doc.text(getCategoryDisplayName(category),14,yPos);yPos+=10;const tableHead=[['Grupo','Jogo #','Jogador 1','Jogador 2','Resultado Sets','Placar Final']];const tableBody=data.matches.map((match,index)=>{const setResult=match.sets.map(set=>`${set.s1}x${set.s2}`).join(' / ');const finalResult=match.done?`${match.finalScore1} x ${match.finalScore2}`:'A Jogar';return[match.group,index+1,match.p1.name,match.p2.name,setResult,finalResult];});if(yPos + tableBody.length * 6 > 280) { doc.addPage(); yPos = 15; doc.setFont(undefined, 'bold'); doc.text(getCategoryDisplayName(category) + " (cont.)", 14, yPos); yPos += 10; }doc.autoTable({head:tableHead,body:tableBody,startY:yPos,theme:'grid',headStyles:{fillColor:[42,82,152]},styles:{fontSize:8},columnStyles:{0:{cellWidth:15},1:{cellWidth:15}, 2:{cellWidth:40},3:{cellWidth:40},4:{cellWidth:40},5:{cellWidth:20}}});yPos=doc.lastAutoTable.finalY+10;}doc.save('relatorio_jogos_grupo_ctb.pdf');}
+        function generateKnockoutReport(){if(typeof window.jspdf==='undefined'){alert('Erro: A biblioteca jsPDF não carregou.');return;}const{jsPDF}=window.jspdf;const doc=new jsPDF();doc.text("Relatório de Jogos - Fase Eliminatória",14,15);let yPos=20;const categories=Object.keys(tournamentData).filter(c=>tournamentData[c].knockoutRounds&&Object.keys(tournamentData[c].knockoutRounds).length>0);if(categories.length===0){alert("Nenhuma eliminatória foi gerada ainda.");return;}for(const category of categories){const data=tournamentData[category];if(yPos>260){doc.addPage();yPos=15;}doc.setFont(undefined,'bold');doc.text(getCategoryDisplayName(category),14,yPos);yPos+=10;const roundOrder=["Oitavas de Final","Quartas de Final","Semifinal","Final"];for(const roundName of roundOrder){if(data.knockoutRounds[roundName]){if(yPos>260){doc.addPage();yPos=15;}doc.setFont(undefined,'normal');doc.text(roundName,14,yPos);yPos+=2;const tableHead=[['Jogador 1','Jogador 2','Resultado Sets','Placar Final']];const tableBody=data.knockoutRounds[roundName].map(match=>{const setResult=match.sets.map(set=>`${set.s1}x${set.s2}`).join(' / ');const finalResult=match.done?`${match.finalScore1} x ${match.finalScore2}`:'A Jogar';return[match.p1.name,match.p2.name,setResult,finalResult];});doc.autoTable({head:tableHead,body:tableBody,startY:yPos,theme:'grid',headStyles:{fillColor:[42,82,152]},styles:{fontSize:8},columnStyles:{0:{cellWidth:40},1:{cellWidth:40},2:{cellWidth:45},3:{cellWidth:20}}});yPos=doc.lastAutoTable.finalY+10;}}}doc.save('relatorio_eliminatorias_ctb.pdf');}
         
         /**
-         * ATUALIZADO: PDF de Resultados (com PP/PC)
+         * NOVO: Gera a Súmula (Scoresheet) de uma partida específica
          */
-        function generateResultsReport() {
+        function generateScoresheet(category, matchId, matchType) {
             if (typeof window.jspdf === 'undefined') { alert('Erro: A biblioteca jsPDF não carregou.'); return; }
             const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.text("Relatório de Resultados - Fase de Grupos", 10, 10);
             
-            let yPos = 20;
-            const categories = Object.keys(tournamentData);
+            const data = tournamentData[category];
+            if (!data) return;
             
-            if(categories.length === 0) { alert("Nenhum grupo foi gerado ainda."); return; }
+            let match;
+            let phase = "";
+            let gameNumber = null;
 
-            for (const category of categories) {
-                const data = tournamentData[category];
-                if (!data.standings) continue;
-                
-                if (yPos > 250) { doc.addPage(); yPos = 10; } // Adiciona nova página se necessário
-                
-                doc.setFont(undefined, 'bold');
-                doc.text(getCategoryDisplayName(category), 10, yPos);
-                yPos += 10;
-                
-                const sortedGroupNames = Object.keys(data.standings).sort();
-                for (const groupName of sortedGroupNames) {
-                    doc.setFont(undefined, 'normal');
-                    doc.text(`Grupo ${groupName}`, 12, yPos);
-                    
-                    const tableHead = [['Pos', 'Nome', 'Pts', 'J', 'V', 'D', 'SP', 'SC', 'PP', 'PC']];
-                    const tableBody = data.standings[groupName].map((stats, index) => [
-                        index + 1, stats.name, stats.Pts, stats.J, stats.V, stats.D, stats.SP, stats.SC, stats.PP, stats.PC
-                    ]);
-                    
-                    doc.autoTable({
-                        head: tableHead, body: tableBody,
-                        startY: yPos + 2,
-                        theme: 'grid',
-                        headStyles: { fillColor: [42, 82, 152] },
-                        styles: { fontSize: 8 },
-                        columnStyles: { 1: { cellWidth: 40 } }
-                    });
-                    yPos = doc.lastAutoTable.finalY + 10;
+            if (matchType === 'group') {
+                match = data.matches.find(m => m.id === matchId);
+                if (match) {
+                    phase = `Grupo ${match.group}`;
+                    gameNumber = data.matches.findIndex(m => m.id === matchId) + 1;
+                }
+            } else if (matchType === 'knockout') {
+                for (const roundName in data.knockoutRounds) {
+                    const foundIndex = data.knockoutRounds[roundName].findIndex(m => m.id === matchId);
+                    if (foundIndex !== -1) {
+                        match = data.knockoutRounds[roundName][foundIndex];
+                        phase = match.round;
+                        gameNumber = foundIndex + 1;
+                        break;
+                    }
                 }
             }
-            doc.save('relatorio_resultados_grupos_ctb.pdf');
+            
+            if (!match) { alert("Erro: Partida não encontrada."); return; }
+            if (!match.done) { alert("Erro: O resultado desta partida ainda não foi salvo. Gere a súmula após salvar."); return; }
+
+            const doc = new jsPDF();
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const centerX = pageWidth / 2;
+
+            // Cabeçalho - Texto em vez de Logo
+            doc.setFontSize(22);
+            doc.setFont(undefined, 'bold');
+            doc.text("CTB", centerX, 20, { align: 'center' });
+            doc.setFont(undefined, 'normal');
+            
+            doc.setFontSize(16); // Ajustado
+            doc.text("TORNEIO CTB - SÚMULA DE JOGO", centerX, 35, { align: 'center' });
+            
+            doc.setFontSize(11);
+            doc.text(`Categoria: ${getCategoryDisplayName(category)}`, 14, 50);
+            doc.text(`Fase: ${phase}`, 14, 57);
+            doc.text(`Jogo: ${gameNumber !== null ? gameNumber : '-'}`, 14, 64);
+            
+            doc.setLineWidth(0.5);
+            doc.line(14, 70, pageWidth - 14, 70); // Linha separadora
+
+            // Tabela de Jogo
+            const tableStartY = 75;
+            const headers = [['Jogador', 'S1', 'S2', 'S3', 'S4', 'S5', 'Sets', 'Pontos']];
+            const body = [];
+            
+            // Linha Jogador 1
+            const row1 = [match.p1.name];
+            for(let i=0; i<5; i++) row1.push(match.sets[i] ? match.sets[i].s1 : '');
+            row1.push(match.finalScore1);
+            row1.push(match.pointsPro1);
+            body.push(row1);
+            
+            // Linha Jogador 2
+            const row2 = [match.p2.name];
+            for(let i=0; i<5; i++) row2.push(match.sets[i] ? match.sets[i].s2 : '');
+            row2.push(match.finalScore2);
+            row2.push(match.pointsPro2);
+            body.push(row2);
+            
+            doc.autoTable({
+                head: headers,
+                body: body,
+                startY: tableStartY,
+                theme: 'grid',
+                headStyles: { fillColor: [220, 220, 220], textColor: 0, halign: 'center' },
+                styles: { halign: 'center', fontSize: 10 },
+                columnStyles: {
+                    0: { halign: 'left', fontStyle: 'bold', cellWidth: 50 }, // Nome jogador
+                    6: { fontStyle: 'bold' }, // Coluna Sets
+                    7: { fontStyle: 'bold' }  // Coluna Pontos
+                }
+            });
+
+            let finalY = doc.lastAutoTable.finalY;
+
+            // Resultado Final
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'bold');
+            doc.text(`Resultado Final: ${match.finalScore1} x ${match.finalScore2}`, centerX, finalY + 15, { align: 'center' });
+            if (match.wo) {
+                 doc.setFont(undefined, 'normal');
+                 doc.setFontSize(10);
+                 doc.text(`(Resultado por W.O.)`, centerX, finalY + 20, { align: 'center' });
+                 finalY += 5; // Adiciona espaço extra se for WO
+            }
+            
+            // Espaço para Árbitro
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'normal');
+            doc.text("Árbitro:", 14, finalY + 30);
+            doc.setLineWidth(0.2);
+            doc.line(30, finalY + 30, 100, finalY + 30); // Linha para assinatura
+
+            // Nome do Arquivo
+            const filename = `Sumula_${category}_${match.p1.name}_vs_${match.p2.name}.pdf`;
+            doc.save(filename.replace(/[^a-z0-9_.-]/gi, '_')); // Limpa caracteres inválidos
         }
 
         // -----------------------------------------------------------------
-        // PASSO 10: FUNÇÕES AUXILIARES
+        // PASSO 10: FUNÇÕES AUXILIARES (Compactado)
         // -----------------------------------------------------------------
         function getCategoryDisplayName(categoryKey){const names={sub13:'Sub 13',sub15:'Sub 15',sub19:'Sub 19',adultoA:'Adulto A',adultoB:'Adulto B',veterano:'Veterano',feminino:'Feminino'};return names[categoryKey]||categoryKey;}
         function createAlertElement(message,type='alert-info'){const alertDiv=document.createElement('div');alertDiv.className=`alert ${type}`;alertDiv.textContent=message;return alertDiv;}
