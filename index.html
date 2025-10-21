@@ -92,6 +92,12 @@
             border-radius: 8px;
             font-size: 1em;
         }
+        
+        /* Estilo para campos desabilitados */
+        .form-group input:disabled, .form-group select:disabled {
+            background: #f0f0f0;
+            cursor: not-allowed;
+        }
 
         .btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -187,7 +193,7 @@
             margin: 10px 0;
         }
 
-        .status-active { background: #38ef7d; }
+        .status-active { background: #38ef7d; color: #115d3b; }
         .status-inactive { background: #f45c43; }
 
         .grid-3 {
@@ -260,7 +266,7 @@
 <body>
     <div class="container">
         <header>
-            <img src="ctb.png" alt="CTB Logo" onerror="this.style.display='none'">
+            <img src="ctb.png" alt="CTB Logo" onerror="this.src='https://via.placeholder.com/150x100?text=CTB+Logo'; this.onerror=null;">
             <h1>CTB - Clube dos Tenistas da Bahia</h1>
             <p>Sistema de Gestão de Torneios de Tênis de Mesa</p>
         </header>
@@ -276,7 +282,6 @@
         </nav>
 
         <div class="content">
-            <!-- INÍCIO -->
             <div id="home" class="page active">
                 <div class="control-panel">
                     <h2>Controle do Torneio</h2>
@@ -291,17 +296,16 @@
                 <div class="alert alert-info">
                     <strong>📋 Como Usar:</strong>
                     <ol style="margin: 10px 0 0 20px;">
-                        <li>Cadastre atletas com nome e ranking inicial</li>
-                        <li>Clique "Iniciar Torneio"</li>
-                        <li>Selecione categoria e gere grupos (Snake System)</li>
-                        <li>Registre resultados dos jogos</li>
-                        <li>Sistema calcula classificação automaticamente</li>
-                        <li>Avance para eliminatórias</li>
-                        <li>Visualize ranking final e exporte PDF</li>
+                        <li>Vá para a aba <strong>📝 Cadastro</strong> e adicione os atletas.</li>
+                        <li>Quando todos estiverem cadastrados, volte aqui e clique em <strong>▶ Iniciar Torneio</strong>.</li>
+                        <li>Vá para a aba <strong>👥 Grupos</strong> para gerar os grupos. (Funcionalidade futura)</li>
+                        <li>Registre os resultados na aba <strong>🏓 Jogos Grupo</strong>. (Funcionalidade futura)</li>
+                        <li>O sistema calculará a classificação e montará as <strong>🏆 Eliminatórias</strong>. (Funcionalidade futura)</li>
+                        <li>Visualize o <strong>📊 Ranking</strong> final e exporte <strong>📄 Relatórios</strong>. (Funcionalidade futura)</li>
                     </ol>
                 </div>
 
-                <h2>Categorias</h2>
+                <h2>Categorias Cadastradas</h2>
                 <div class="grid-3">
                     <div class="info-card">
                         <h4>🏓 Sub 13</h4>
@@ -330,7 +334,6 @@
                 </div>
             </div>
 
-            <!-- CADASTRO -->
             <div id="cadastro" class="page">
                 <h2>Cadastro de Atletas</h2>
                 <div class="alert alert-info">Cadastre atletas com nome e ranking inicial (1 = melhor posição)</div>
@@ -358,3 +361,397 @@
                 </div>
                 
                 <button class="btn btn-success" onclick="addAthlete()">✓ Cadastrar Atleta</button>
+
+                <hr style="margin: 30px 0;">
+
+                <h2>Atletas Cadastrados</h2>
+                <div class="alert alert-warning" id="no-athletes-warning">Nenhum atleta cadastrado ainda.</div>
+                <table id="athletes-table" style="display:none;">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Categoria</th>
+                            <th>Ranking</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="athletes-table-body">
+                        </tbody>
+                </table>
+
+            </div>
+
+            <div id="grupos" class="page">
+                <h2>Gerenciamento de Grupos</h2>
+                <div class="alert alert-warning">Esta funcionalidade (geração de grupos "Snake System") será implementada em breve.</div>
+                </div>
+            
+            <div id="jogos" class="page">
+                <h2>Resultados dos Jogos (Fase de Grupos)</h2>
+                <div class="alert alert-warning">Esta funcionalidade (registro de placares) será implementada em breve.</div>
+                </div>
+
+            <div id="eliminatorias" class="page">
+                <h2>Fase Eliminatória (Mata-Mata)</h2>
+                <div class="alert alert-warning">Esta funcionalidade (bracket de eliminatórias) será implementada em breve.</div>
+                </div>
+
+            <div id="ranking" class="page">
+                <h2>Ranking Final</h2>
+                <div class="alert alert-warning">Esta funcionalidade (ranking final) será implementada em breve.</div>
+                </div>
+
+            <div id="relatorios" class="page">
+                <h2>Relatórios</h2>
+                <div class="alert alert-info">Exporte os dados do torneio em formato PDF.</div>
+                <button class="btn btn-info" onclick="generateAthleteReport()">📄 Exportar Lista de Atletas (PDF)</button>
+                </div>
+
+        </div> </div> <script>
+        
+        // -----------------------------------------------------------------
+        // PASSO 1: "BANCO DE DADOS" E VARIÁVEIS GLOBAIS
+        // -----------------------------------------------------------------
+        
+        // Array que guardará todos os atletas cadastrados.
+        // Cada atleta será um objeto: { id, name, ranking, category }
+        let athletes = [];
+        
+        // Variável que controla se o torneio já começou.
+        // Se 'true', não permite cadastrar novos atletas.
+        let tournamentActive = false;
+
+        // -----------------------------------------------------------------
+        // PASSO 2: FUNÇÃO DE NAVEGAÇÃO
+        // -----------------------------------------------------------------
+
+        /**
+         * Mostra a página clicada e esconde todas as outras.
+         * Também atualiza a classe 'active' no botão do menu.
+         * @param {string} pageId - O ID da div da página (ex: 'home', 'cadastro')
+         */
+        function showPage(pageId) {
+            // Esconde todas as divs com a classe '.page'
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Mostra a div da página alvo
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+
+            // Atualiza o estilo 'active' nos botões da navegação
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => {
+                btn.classList.remove('active');
+                // Compara o 'onclick' do botão com o pageId pedido
+                if (btn.getAttribute('onclick') === `showPage('${pageId}')`) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // -----------------------------------------------------------------
+        // PASSO 3: FUNÇÕES DA PÁGINA "CADASTRO"
+        // -----------------------------------------------------------------
+        
+        /**
+         * Adiciona um novo atleta ao array 'athletes'.
+         */
+        function addAthlete() {
+            // 1. Verifica se o torneio já começou
+            if (tournamentActive) {
+                alert('Erro: Não é possível cadastrar atletas após o início do torneio.');
+                return;
+            }
+
+            // 2. Pega os valores dos campos do formulário
+            const name = document.getElementById('athleteName').value.trim(); // .trim() remove espaços em branco
+            const ranking = parseInt(document.getElementById('athleteRanking').value);
+            const category = document.getElementById('athleteCategory').value;
+
+            // 3. Validação dos campos
+            if (name === '') {
+                alert('Erro: Por favor, digite o nome do atleta.');
+                return;
+            }
+            if (isNaN(ranking) || ranking <= 0) {
+                alert('Erro: Por favor, digite um ranking inicial válido (maior que 0).');
+                return;
+            }
+
+            // 4. (Opcional) Verifica se o ranking já existe naquela categoria
+            const duplicateRanking = athletes.find(a => a.category === category && a.ranking === ranking);
+            if (duplicateRanking) {
+                alert(`Erro: Já existe um atleta (${duplicateRanking.name}) com o ranking ${ranking} na categoria ${category}.`);
+                return;
+            }
+
+            // 5. Cria o objeto do novo atleta
+            const newAthlete = {
+                id: Date.now(), // Gera um ID único baseado na data/hora
+                name: name,
+                ranking: ranking,
+                category: category
+            };
+
+            // 6. Adiciona o atleta ao "banco de dados" (array)
+            athletes.push(newAthlete);
+            
+            // 7. Feedback para o usuário
+            alert(`Atleta ${name} cadastrado com sucesso na categoria ${category}!`);
+
+            // 8. Limpa o formulário para o próximo cadastro
+            document.getElementById('athleteName').value = '';
+            document.getElementById('athleteRanking').value = 1;
+            document.getElementById('athleteName').focus(); // Foca no campo nome
+
+            // 9. Atualiza as contagens no Dashboard (Início) e a tabela
+            updateDashboardCounts();
+            renderAthletesTable();
+        }
+
+        /**
+         * Atualiza a tabela de atletas cadastrados na página de Cadastro.
+         */
+        function renderAthletesTable() {
+            const tableBody = document.getElementById('athletes-table-body');
+            const table = document.getElementById('athletes-table');
+            const warning = document.getElementById('no-athletes-warning');
+            
+            // Limpa a tabela
+            tableBody.innerHTML = ''; 
+
+            if (athletes.length === 0) {
+                table.style.display = 'none';
+                warning.style.display = 'block';
+                return;
+            }
+            
+            table.style.display = 'table'; // Mostra a tabela
+            warning.style.display = 'none'; // Esconde o aviso
+
+            // Ordena os atletas por categoria e depois por ranking
+            const sortedAthletes = [...athletes].sort((a, b) => {
+                if (a.category < b.category) return -1;
+                if (a.category > b.category) return 1;
+                return a.ranking - b.ranking; // Se a categoria for igual, ordena pelo ranking
+            });
+
+            // Adiciona cada atleta como uma linha na tabela
+            sortedAthletes.forEach(athlete => {
+                const row = `
+                    <tr>
+                        <td>${athlete.name}</td>
+                        <td>${athlete.category}</td>
+                        <td>${athlete.ranking}</td>
+                        <td>
+                            <button class="btn btn-danger" style="padding: 5px 10px;" onclick="removeAthlete(${athlete.id})">
+                                X
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        }
+        
+        /**
+         * Remove um atleta do array 'athletes' pelo ID.
+         * @param {number} athleteId - O ID (Date.now()) do atleta a ser removido.
+         */
+        function removeAthlete(athleteId) {
+            if (tournamentActive) {
+                alert('Erro: Não é possível remover atletas após o início do torneio.');
+                return;
+            }
+
+            if (confirm('Tem certeza que deseja remover este atleta?')) {
+                // Filtra o array, mantendo apenas os atletas com ID diferente
+                athletes = athletes.filter(athlete => athlete.id !== athleteId);
+                
+                // Atualiza a tabela e o dashboard
+                renderAthletesTable();
+                updateDashboardCounts();
+            }
+        }
+
+
+        // -----------------------------------------------------------------
+        // PASSO 4: FUNÇÕES DA PÁGINA "INÍCIO"
+        // -----------------------------------------------------------------
+
+        /**
+         * Atualiza os contadores de atletas no Dashboard (página Início).
+         */
+        function updateDashboardCounts() {
+            // Zera as contagens
+            const counts = {
+                sub13: 0,
+                sub15: 0,
+                sub19: 0,
+                adultoA: 0,
+                adultoB: 0,
+                veterano: 0
+            };
+
+            // Conta os atletas de cada categoria
+            athletes.forEach(athlete => {
+                if (counts.hasOwnProperty(athlete.category)) {
+                    counts[athlete.category]++;
+                }
+            });
+
+            // Atualiza o HTML
+            document.getElementById('count-sub13').textContent = `Atletas: ${counts.sub13}`;
+            document.getElementById('count-sub15').textContent = `Atletas: ${counts.sub15}`;
+            document.getElementById('count-sub19').textContent = `Atletas: ${counts.sub19}`;
+            document.getElementById('count-adultoA').textContent = `Atletas: ${counts.adultoA}`;
+            document.getElementById('count-adultoB').textContent = `Atletas: ${counts.adultoB}`;
+            document.getElementById('count-veterano').textContent = `Atletas: ${counts.veterano}`;
+        }
+        
+        /**
+         * Inicia o torneio, atualiza o status e bloqueia novos cadastros.
+         */
+        function startTournament() {
+            if (athletes.length === 0) {
+                alert('Erro: Cadastre pelo menos um atleta antes de iniciar o torneio.');
+                return;
+            }
+            
+            if (confirm('Deseja realmente iniciar o torneio? O cadastro de novos atletas será bloqueado.')) {
+                tournamentActive = true;
+                
+                // Atualiza o "badge" de status
+                const statusBadge = document.getElementById('tournamentStatus');
+                statusBadge.textContent = 'Em Andamento';
+                statusBadge.classList.remove('status-inactive');
+                statusBadge.classList.add('status-active');
+                
+                // Desabilita os campos de cadastro
+                document.getElementById('athleteName').disabled = true;
+                document.getElementById('athleteRanking').disabled = true;
+                document.getElementById('athleteCategory').disabled = true;
+
+                alert('Torneio iniciado! Boa sorte a todos os atletas!');
+                
+                // Leva o usuário para a próxima etapa (Grupos)
+                showPage('grupos');
+            }
+        }
+        
+        /**
+         * Finaliza o torneio (apenas muda o status, por enquanto).
+         */
+        function finalizeTournament() {
+            tournamentActive = false; // Permite um reset
+            const statusBadge = document.getElementById('tournamentStatus');
+            statusBadge.textContent = 'Finalizado';
+            statusBadge.classList.remove('status-active');
+            statusBadge.classList.add('status-inactive');
+            alert('Torneio finalizado!');
+        }
+
+        /**
+         * Reseta o sistema, limpando todos os dados.
+         */
+        function resetTournament() {
+            if (confirm('ATENÇÃO! Tem certeza? Isso apagará TODOS os dados (atletas, grupos, jogos) e reiniciará o sistema. Esta ação não pode ser desfeita.')) {
+                // Limpa o "banco de dados"
+                athletes = [];
+                tournamentActive = false;
+                
+                // Reseta o "badge" de status
+                const statusBadge = document.getElementById('tournamentStatus');
+                statusBadge.textContent = 'Não Iniciado';
+                statusBadge.classList.remove('status-active');
+                statusBadge.classList.add('status-inactive');
+                
+                // Reabilita os campos de cadastro
+                document.getElementById('athleteName').disabled = false;
+                document.getElementById('athleteRanking').disabled = false;
+                document.getElementById('athleteCategory').disabled = false;
+                
+                // Limpa o formulário
+                document.getElementById('athleteName').value = '';
+                document.getElementById('athleteRanking').value = 1;
+                
+                // Limpa o dashboard e a tabela
+                updateDashboardCounts();
+                renderAthletesTable();
+                
+                // (Futuro) Limpar divs de grupos, jogos, etc.
+                // document.getElementById('div-grupos').innerHTML = '';
+                // document.getElementById('div-jogos').innerHTML = '';
+                
+                alert('Sistema resetado! Pronto para um novo torneio.');
+                showPage('home'); // Volta para a página inicial
+            }
+        }
+        
+        // -----------------------------------------------------------------
+        // PASSO 5: FUNÇÕES DA PÁGINA "RELATÓRIOS" (PDF)
+        // -----------------------------------------------------------------
+        
+        /**
+         * Gera um PDF com a lista de atletas cadastrados.
+         */
+        function generateAthleteReport() {
+            // Verifica se as bibliotecas PDF carregaram
+            if (typeof window.jspdf === 'undefined' || typeof window.jspdf.jsPDF === 'undefined') {
+                alert('Erro: A biblioteca jsPDF não carregou. Verifique a conexão com a internet.');
+                return;
+            }
+            // Fix para a biblioteca
+            const { jsPDF } = window.jspdf;
+            
+            if (athletes.length === 0) {
+                alert('Não há atletas cadastrados para gerar o relatório.');
+                return;
+            }
+
+            const doc = new jsPDF();
+
+            doc.text("Relatório de Atletas Cadastrados - CTB", 10, 10);
+
+            // Prepara os dados para a tabela
+            const tableData = athletes.map(a => [a.name, a.category, a.ranking]);
+            
+            // Usa o plugin autoTable para criar a tabela
+            doc.autoTable({
+                head: [['Nome', 'Categoria', 'Ranking']],
+                body: tableData,
+                startY: 20, // Posição onde a tabela começa
+            });
+
+            // Salva o arquivo
+            doc.save('relatorio_atletas_ctb.pdf');
+        }
+
+
+        // -----------------------------------------------------------------
+        // PASSO 6: INICIALIZAÇÃO
+        // -----------------------------------------------------------------
+        
+        /**
+         * Código que roda assim que a página termina de carregar.
+         * Garante que o 'showPage' e 'updateDashboardCounts' rodem no início.
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mostra a página 'home' como padrão
+            showPage('home');
+            
+            // Atualiza os contadores (vai mostrar 0)
+            updateDashboardCounts();
+            
+            // Atualiza a tabela (vai mostrar o aviso)
+            renderAthletesTable();
+        });
+        
+    </script>
+    </body>
+</html>
